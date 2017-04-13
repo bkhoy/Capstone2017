@@ -1,8 +1,8 @@
 'use strict';
 
+//Same thing as document.ready
+$(function() {
 
-(function() {
-	$(document).ready(function() {
-		alert("hello world!");
-	});
-})();
+
+
+});
