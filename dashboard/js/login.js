@@ -4,8 +4,8 @@
 $(function() {
 
     $("#loginForm").on("submit", function() {
-        event.preventDefault();
-        alert("Hi");
+        // send user login credentials to web-service.php to authenticate
+
     });
 
 

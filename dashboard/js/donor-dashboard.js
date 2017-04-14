@@ -26,7 +26,9 @@ function initMap() {
 }
 
 function initChart() {
-    var ctx = $('#myChart');
+    var ctx = document.getElementById("myChart").getContext("2d");
+    ctx.canvas.width = 800;
+    ctx.canvas.height = 400;
     var data = {
         //labels: ["January", "February", "March", "April", "May", "June", "July"],
         datasets: [
@@ -55,7 +57,8 @@ function initChart() {
         title: {
             display: true,
             text: "Chart Title goes here"
-        }
+        },
+        maintainAspectRatio: false
     };
     var myLineChart = new Chart(ctx, {
         type: 'line',
