@@ -47,7 +47,7 @@ function initChart() {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: [65, 59, 80, 81, 56, 55, 40], // data points go here
+                data: [65, 59, 80, 81, 56, 55, 99], // data points go here
                 spanGaps: false, // If true, lines will be drawn between points with no or null data
             }
         ],
