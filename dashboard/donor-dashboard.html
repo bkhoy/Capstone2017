@@ -11,7 +11,20 @@
 </head>
 <body>
 
-    <div id="map"></div>
+    <div id="wrapper">
+        <div id="map"></div>
+        <div id="over-map">
+            <div class="map-divs">
+                <p> Your device has produced 50 mL of chlorine in the past 3 day(s)! </p>
+            </div>
+            <div class="map-divs">
+                <p> Your device has been online for the past 14 day(s). </p>
+            </div>
+            <div class="map-divs">
+                <p> The last device maintenance was 5 day(s) ago. </p>
+            </div>
+        </div>
+    </div>
 
     <div id="middle-banner">
         <h2>"Watch water clean itself"</h2>
@@ -22,7 +35,7 @@
             <div class="col-md-4">
                 <svg height="300" width="300">
                     <circle r="125" cx="150" cy="150" fill="lightgray"/>
-                    <text x="50%" y="50%" text-anchor="middle">Text goes here.</text>
+                    <text id="first-circle-text" x="50%" y="50%" text-anchor="middle">what goes here? </text>
                 </svg>
             </div>
             <div class="col-md-4">
@@ -40,7 +53,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div id="chart-container" class="container">
         <div id="graph">
             <canvas id="myChart" width="400" height="400"></canvas>
         </div>

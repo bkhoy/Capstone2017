@@ -28,12 +28,12 @@ function initMap() {
 function initChart() {
     var ctx = document.getElementById("myChart").getContext("2d");
     ctx.canvas.width = 800;
-    ctx.canvas.height = 400;
+    ctx.canvas.height = 500;
     var data = {
         //labels: ["January", "February", "March", "April", "May", "June", "July"],
         datasets: [
             {
-                label: "Your SE Flow Chlorine Production Rate",
+                label: "Chlorine Production Rate",
                 fill: true,
                 lineTension: 0.0,
                 backgroundColor: "rgba(75,192,192,0.4)", // The fill color under the line
@@ -56,7 +56,9 @@ function initChart() {
     var options = {
         title: {
             display: true,
-            text: "Chart Title goes here"
+            text: "Your device at work",
+            fontSize: 50,
+            padding: 50
         },
         maintainAspectRatio: false
     };
