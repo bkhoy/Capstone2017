@@ -41,10 +41,14 @@
     padding: 2em;
 }
 
-#first-circle-text {
-    font-size: 2em;
+#first-circle-text, #second-circle-text, #third-circle-text {
+    font-size: 6em;
 }
 
+.circle-facts {
+    text-align: center;
+    font-size: 2em;
+}
 
 #chart-container {
     margin-bottom: 10em;
