@@ -53,6 +53,7 @@ function initChart() {
             }
         ],
         xLabels: ['Apr 8', 'Apr 9', 'Apr 10', 'Apr 11', 'Apr 12', 'Apr 13', 'Apr 14'],
+        yLabels: ['testing']
     };
     var options = {
         title: {

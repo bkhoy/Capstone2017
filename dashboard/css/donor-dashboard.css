@@ -3,13 +3,10 @@ body {
 }
 
 #map {
-    width: 100%;
+    width: 70%;
     height: 500px;
     background-color: grey;
-    /* uncomment if width is not 100%
     margin-left: auto;
-    margin-right: auto;
-    */
 }
 
 nav {
@@ -164,4 +161,29 @@ nav ul li {
 
 span {
     font-size: 2.5em;
+}
+
+#map-wrapper {
+    background-color: lightgray;
+}
+
+#map-overlay {
+    float: left;
+    /* overflow: scroll; */
+}
+
+.device-block {
+    max-width: 340px;
+    margin-left: 2em;
+    padding: 1em;
+    display: block;
+    margin-top: 1em;
+}
+
+.device-block img {
+    max-width: 260px;
+}
+
+.device-block p {
+    margin-top: 0.5em;
 }
