@@ -29,7 +29,7 @@ function initMap() {
 function initChart() {
     var ctx = document.getElementById("myChart").getContext("2d");
     ctx.canvas.width = 800;
-    ctx.canvas.height = 500;
+    ctx.canvas.height = 600;
     var data = {
         //labels: ["January", "February", "March", "April", "May", "June", "July"],
         datasets: [
@@ -59,7 +59,7 @@ function initChart() {
             display: true,
             text: "Your devices at work",
             fontSize: 40,
-            padding: 50,
+            padding: 60,
             fontFamily: "'Source Sans Pro', 'sans-serif'",
             fontStyle: 'normal'
         },
