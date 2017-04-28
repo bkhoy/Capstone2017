@@ -11,60 +11,66 @@
 </head>
 <body>
 
-    <div id="wrapper">
-        <div id="map"></div>
-        <div id="over-map">
-            <div class="map-divs">
-                <p> Your device has produced 50 mL of chlorine in the past 3 day(s)! </p>
+    <nav>
+        <ul>
+            <li id="logo"> <a href="#"><img src="img/msr-logo.png"></a></li>
+            <li> <a href="#"> Home </a> </li>
+            <li> <a href="#devices"> Devices </a> </li>
+            <li> <a href="#chart-container"> Impact </a> </li>
+            <li> <a href="#donate"> Donate </a> </li>
+            <li> <a href="#sponsors"> Sponsors </a> </li>
+            <li id="account"> <a href="account"> My Account </a> </li>
+        </ul>
+    </nav>
+
+    <div id="landing-image">
+        <h1>Thank you for your donation!</h1>
+        <div id="bottom">
+            <div id="left">
+                <h2>You have donated <br>  <strong> <span>3</span> devices </strong></h2>
             </div>
-            <div class="map-divs">
-                <p> Your device has been online for the past 14 day(s). </p>
-            </div>
-            <div class="map-divs">
-                <p> The last device maintenance was 5 day(s) ago. </p>
+            <div id="right">
+                <h2>You have impacted <br> <strong> <span>150</span> lives </strong> </h2>
             </div>
         </div>
     </div>
 
-    <div id="middle-banner">
-        <h2>Thanks for your donation! Your device is happily functioning in a small clinic in Kenya.</h2>
+    <div id="devices" class="banner">
+        <h2>Explore how your devices are changing the world! </h2>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <svg height="300" width="300">
-                    <circle r="125" cx="150" cy="150" fill="#b6e5e5"/>
-                    <text id="first-circle-text" x="50%" y="58%" text-anchor="middle">100+</text>
-                </svg>
-                <div>
-                    <p class="circle-facts">The size of the village your device is located in</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <svg height="300" width="300">
-                    <circle r="125" cx="150" cy="150" fill="#b6e5e5"/>
-                    <text id="second-circle-text" x="50%" y="58%" text-anchor="middle">20</text>
-                </svg>
-                <div>
-                    <p class="circle-facts">The liters of clean water produced because of your device</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <svg height="300" width="300">
-                    <circle r="125" cx="150" cy="150" fill="#b6e5e5"/>
-                    <text id="third-circle-text" x="50%" y="58%" text-anchor="middle">38</text>
-                </svg>
-                <div>
-                    <p class="circle-facts">The estimated number of lives you impacted</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="map"></div>
 
     <div id="chart-container" class="container">
         <div id="graph">
-            <canvas id="myChart" width="400" height="400"></canvas>
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <div id="donate" class="container">
+        <h1>Donate more</h1>
+    </div>
+
+    <div id="sponsors" class="container">
+        <h1>Sponsors</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="img/msr-logo.png">
+            </div>
+
+            <div class="col-md-6">
+                <img src="img/path-logo.jpg">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <img src="img/ischool-logo.png">
+            </div>
+
+            <div class="col-md-6">
+                <img src="img/wv-logo.png">
+            </div>
         </div>
     </div>
 

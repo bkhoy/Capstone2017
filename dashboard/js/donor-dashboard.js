@@ -16,8 +16,9 @@ $(function() {
 function initMap() {
     var kenya = {lat: 0.0236, lng: 37.9062};
      var map = new google.maps.Map(document.getElementById('map'), {
-         zoom: 4,
-         center: kenya
+         zoom: 8,
+         center: kenya,
+         scrollwheel: false
      });
      var marker = new google.maps.Marker({
          position: kenya,
@@ -56,9 +57,11 @@ function initChart() {
     var options = {
         title: {
             display: true,
-            text: "Your device at work",
-            fontSize: 50,
-            padding: 50
+            text: "Your devices at work",
+            fontSize: 40,
+            padding: 50,
+            fontFamily: "'Source Sans Pro', 'sans-serif'",
+            fontStyle: 'normal'
         },
         maintainAspectRatio: false
     };
