@@ -1,4 +1,5 @@
 <?php
+	ini_set('max_execution_time', 300);
 
 	// Imports global functions
 	require('functions.php');
@@ -11,8 +12,6 @@
 	
 	// Parse the log file into the array $cycles, which is an array of cycle objects
 	$serialNum = substr($logfile, 8, 5);
-	echo $serialNum . ' serialNum <br/>';
-
 	$cycles = array();
 	if (($logdata = fopen($logfile, "r")) !== FALSE) {		
 		$cycle = null;
@@ -32,14 +31,12 @@
 			}
 	    }
 
-	    // in case end of file does not have an empty line at the end of the file, submits the last cycle.
+	    // in case end of file does not have an empty line at the end of the file, appends the last cycle.
 	    if ($cycle !== null) {
     		array_push($cycles, $cycle);
     	} 
 	    fclose($logdata);
 	}
-	echo('total cycles: ' . count($cycles) . '<br />');
-	//echo var_dump($cycles);
 
 	//add the parsed cycles to the database
 	submitLogCycles($cycles, $serialNum);
@@ -57,24 +54,30 @@
 
 	// Takes a Cycle object and inserts its contents into the database
 	function sumbitCycle($cycle, $serialNum) {
-		// insert the cycle into the database and get the cycleID from the database
+		//insert the cycle into the database and get the cycleID from the database
 		$query = "INSERT INTO CYCLE (deviceID, startSalinity, startTempIn, startCell1, startCell2, startCell3, totalCurrent, startDateTime) VALUES
-					((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :salinity, :tempIn, :cell1, :cell2, :cell3, :totalCurrent, :startDateTime);
-					SELECT LAST_INSERT_ID();";
+					((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :salinity, :tempIn, :cell1, :cell2, :cell3, :totalCurrent, :startDateTime);";
+					#SELECT LAST_INSERT_ID();";
 		$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 		$sth->execute(array(':serialNum' => $serialNum, ':salinity' => $cycle->salinity, ':tempIn' => $cycle->tempIn, ':cell1' => $cycle->cell1, ':cell2' => $cycle->cell2, ':cell3' => $cycle->cell3, ':totalCurrent' => $cycle->totalCurrent, ':startDateTime' => $cycle->dateTime));
-		$cycleID = $sth->fetch();
 
-		echo $cycleID . ' cycleID<br />';
+		// gets the cycle id
+// if i can get a stored procedure then this wouldn't be necessary
+		$query2 ="SELECT cycleID FROM CYCLE WHERE ? = startDateTime AND deviceID = (SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = ?) LIMIT 1;";
+		$sth2 = database()->prepare($query2);
+		$sth2->bindValue(1, $cycle->dateTime, PDO::PARAM_STR);
+		$sth2->bindValue(2, $serialNum, PDO::PARAM_INT);
+		$sth2->execute();
+		$cycleID = $sth2->fetch()[0];
 
 		// insert the cycle's entries into the database in batches of 100
 		$entryBatch = array();
 		foreach ($cycle->entries as $entry) {
-			if(count($entryBatch) > 100) {
+			if(count($entryBatch) > 500) {
 				submitEntries($entryBatch, $cycleID);
 				$entryBatch = array();
 			}
-			array_push($entryBatch, $result);
+			array_push($entryBatch, $entry);
 		}
 		// inserts any remaining entries into the database
 		if (count($entryBatch) !== 0) {
@@ -82,21 +85,20 @@
 		}
 	}
 
-	// Takes an array of integer array, with each array representing a single entry and submits each element of the array into the database with the given cycleID.
-	// Expects each element of the $entries array to be all ints and in the following order: seconds, salinity, flowrate, temp_in, temp_out, 12V supply, CELL1, CELL2, CELL3, CELL4
+	// Takes an array of strings, with each string recording a single entry and submits each value in the string seperated by commas into the database with the given cycleID.
+	// Expects each string to be have values in the following order: seconds, salinity, flowrate, temp_in, temp_out, 12V supply, CELL1, CELL2, CELL3, CELL4
 	function submitEntries($entries, $cycleID) {
 		$count = count($entries);
 		$query = "";
 		$queryValues = [':cycleID' => $cycleID];
-		
-		// loops through each element in the $entires array and adds a insert query for that element to $query. Then adds that elements values to the $queryValues array with the corresponding variable names.
-		for ($i=0; $i < $count; $i++) { 
+		// loops through each element in the $entires array and appends an insert query for that element to $query. Then adds that elements values to the $queryValues array with the corresponding variable names.
+		for ($i=0; $i < $count; $i++) {
+			$entry = str_getcsv($entries[$i]);
 			$query .= "INSERT INTO ENTRY (cycleID, seconds, salinity, flowrate, tempIN, tempOut, supply, cell1, cell2, cell3, cell4) VALUES
-						((SELECT cycleID FROM CYCLE WHERE cycleID = :cycleID), :seconds" . $i . ", :salinity" . $i . ", :flowrate" . $i . ", tempIn" . $i . ", tempOut" . $i . ", :supply" . $i . ", :cell1" . $i . ", :cell2" . $i . ", :cell3" . $i . ", :cell4" . $i . ");";
-			$entryValues = [(':seconds' . $i) => $entries[$i][0], (':salinity' . $i) => $entries[$i][1], (':flowrate' . $i) => $entries[$i][2], (':tempIn' . $i) => $entries[$i][3], (':tempOut' . $i) => $entries[$i][4], (':supply' . $i) => $entries[$i][5], (':cell1' . $i) => $entries[$i][6], (':cell2' . $i) => $entries[$i][7], (':cell3' . $i) => $entries[$i][8], (':cell4' . $i) => $entries[$i][9]];
+						((SELECT cycleID FROM CYCLE WHERE cycleID = :cycleID), :seconds" . $i . ", :salinity" . $i . ", :flowrate" . $i . ", :tempIn" . $i . ", :tempOut" . $i . ", :supply" . $i . ", :cell1" . $i . ", :cell2" . $i . ", :cell3" . $i . ", :cell4" . $i . ");";
+			$entryValues = [(':seconds' . $i) => $entry[0], (':salinity' . $i) => $entry[1], (':flowrate' . $i) => $entry[2], (':tempIn' . $i) => $entry[3], (':tempOut' . $i) => $entry[4], (':supply' . $i) => $entry[5], (':cell1' . $i) => $entry[6], (':cell2' . $i) => $entry[7], (':cell3' . $i) => $entry[8], (':cell4' . $i) => $entry[9]];
 			$queryValues = array_merge($queryValues, $entryValues);
 		}
-
 		$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 		$sth->execute($queryValues);
 	}
