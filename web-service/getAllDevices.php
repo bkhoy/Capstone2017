@@ -3,11 +3,7 @@
 	
 	// Imports global functions
 	require('functions.php');
-
-	//Need to add check for authentication
-	// if (!isset($_POST[''])) {
-	// 	die('Must be signed in to make this request.');
-	// }
+	authenticate();
 	
 	// Get all devices from the database
 	 $query = 'SELECT serialNum, city, country, placementDate FROM DEVICE d
@@ -32,7 +28,7 @@
 		$lastUsed = 'TEMP'; //$result['startDateTime'];
 		$status = 'Active';
 		$device = array('serialNum' => $serialNum, 'city' => $city, 'country' => $country, 'deploymentDate' => $placementDate, 'lastUsed' => $lastUsed, 'status' => 'status');
-		array_push($output, $device);
+		$output[] = $device;
 	}
 
 	// Output JSON object with query results

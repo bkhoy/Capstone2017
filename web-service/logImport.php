@@ -3,28 +3,29 @@
 
 	// Imports global functions
 	require('functions.php');
-	
-	// Get and parse the file
+	authenticate();
+
+	// Get the name of the log file
 	if(!isset($_GET['logfile'])) {
 		die('Must pass a file name');
 	}
 	$logfile = $_GET['logfile'];
-	
-	// Parse the log file into the array $cycles, which is an array of cycle objects
+		
+	// Parse the log file into the cycles and then submit each cycle
 	$serialNum = substr($logfile, 8, 5);
-	$cycles = array();
 	if (($logdata = fopen($logfile, "r")) !== FALSE) {		
 		$cycle = null;
 	    while (($line = fgetcsv($logdata, 1000, ",")) !== FALSE) {
 	        if (strcmp(trim($line[0]), "salinity(g/l)") === 0) { // cycle start line
 	        	$cycle = new cycle(fgetcsv($logdata, 1000, ","));
 	        } else if (strcmp(trim($line[0]), "time(sec)") === 0) {
-	        	//skip this line
+	        	//skip the title line for the entries section
 	        } else if (count($line) === 10) { // data line
-	        	array_push($cycle->entries, implode(', ', $line));
+	        	$cycle->entries[] = implode(', ', $line);
+	        	//array_push($cycle->entries, implode(', ', $line));
 	        } else { // first 3 letters are 'NUL' or empty line either indicates the end of a cycle (all other cases)
 	        	if ($cycle !== null) {
-	        		array_push($cycles, $cycle);
+	        		sumbitCycle($cycle, $serialNum);
 	        	}      		
         		//reset temps
         		$cycle = null;
@@ -33,51 +34,30 @@
 
 	    // in case end of file does not have an empty line at the end of the file, appends the last cycle.
 	    if ($cycle !== null) {
-    		array_push($cycles, $cycle);
+    		sumbitCycle($cycle, $serialNum);
     	} 
 	    fclose($logdata);
 	}
 
-	//add the parsed cycles to the database
-	submitLogCycles($cycles, $serialNum);
-
-
 //FUNCTIONS
-	// Takes an array of Cycle objects and adds them to the database.
-	function submitLogCycles($cycleSet, $serialNum) {
-//check to see what the newest cycle from the database is...
-		foreach ($cycleSet as $cycle) {
-			//if date is newer than newest cycle from database??
-			sumbitCycle($cycle, $serialNum);
-		}
-	}
-
 	// Takes a Cycle object and inserts its contents into the database
 	function sumbitCycle($cycle, $serialNum) {
-		//insert the cycle into the database and get the cycleID from the database
-		$query = "INSERT INTO CYCLE (deviceID, startSalinity, startTempIn, startCell1, startCell2, startCell3, totalCurrent, startDateTime) VALUES
-					((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :salinity, :tempIn, :cell1, :cell2, :cell3, :totalCurrent, :startDateTime);";
-					#SELECT LAST_INSERT_ID();";
+//check to see if the cycle exists or not
+		//insert the cycle into the database and gets the cycleID from the database
+		$query = "CALL addCycle((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :salinity, :tempIn, :cell1, :cell2, :cell3, :totalCurrent, :startDateTime, @output); SELECT @ouptut;";
 		$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 		$sth->execute(array(':serialNum' => $serialNum, ':salinity' => $cycle->salinity, ':tempIn' => $cycle->tempIn, ':cell1' => $cycle->cell1, ':cell2' => $cycle->cell2, ':cell3' => $cycle->cell3, ':totalCurrent' => $cycle->totalCurrent, ':startDateTime' => $cycle->dateTime));
+		$cycleID = $sth->fetch()[0];
 
-		// gets the cycle id
-// if i can get a stored procedure then this wouldn't be necessary
-		$query2 ="SELECT cycleID FROM CYCLE WHERE ? = startDateTime AND deviceID = (SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = ?) LIMIT 1;";
-		$sth2 = database()->prepare($query2);
-		$sth2->bindValue(1, $cycle->dateTime, PDO::PARAM_STR);
-		$sth2->bindValue(2, $serialNum, PDO::PARAM_INT);
-		$sth2->execute();
-		$cycleID = $sth2->fetch()[0];
-
-		// insert the cycle's entries into the database in batches of 100
+		// insert the cycle's entries into the database in batches of 1000
 		$entryBatch = array();
 		foreach ($cycle->entries as $entry) {
-			if(count($entryBatch) > 500) {
+			if(count($entryBatch) > 1000) {
 				submitEntries($entryBatch, $cycleID);
 				$entryBatch = array();
 			}
-			array_push($entryBatch, $entry);
+			$entryBatch[] = $entry;
+			//array_push($entryBatch, $entry);
 		}
 		// inserts any remaining entries into the database
 		if (count($entryBatch) !== 0) {
