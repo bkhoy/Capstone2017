@@ -41,7 +41,6 @@ function initDevices() {
 // initMap is called in html when it calls to Google Maps API
 function initMap() {
     var api = "http://boneappletea.me/webservice/getDeviceLocations.php";
-
     $.ajax({
         url: api,
         dataType: "json",
@@ -55,7 +54,6 @@ function initMap() {
             console.log(error);
         }
     });
-
     //populateMap();
 }
 
@@ -80,21 +78,10 @@ function populateMap(data) {
             },
             title: device.serialNum
         });
-
         // add the marker to the map
         marker.setMap(map);
     }
 }
-
-function centerControl(controlDiv, map, center) {
-    var control = this;
-
-    // Set the center property upon construction
-    control.center_ = center;
-    controlDiv.style.clear = 'both';
-
-}
-
 
 function initChart() {
     var ctx = document.getElementById("myChart").getContext("2d");
