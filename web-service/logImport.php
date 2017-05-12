@@ -1,5 +1,5 @@
 <?php
-	ini_set('max_execution_time', 300);
+	ini_set('max_execution_time', 5000);
 
 	// Imports global functions
 	require('functions.php');
@@ -10,38 +10,47 @@
 		die('Must pass a file name');
 	}
 	$logfile = $_GET['logfile'];
-		
-	// Parse the log file into the cycles and then submit each cycle
-	$serialNum = substr($logfile, 8, 5);
-	if (($logdata = fopen($logfile, "r")) !== FALSE) {		
-		$cycle = null;
-	    while (($line = fgetcsv($logdata, 1000, ",")) !== FALSE) {
-	        if (strcmp(trim($line[0]), "salinity(g/l)") === 0) { // cycle start line
-	        	$cycle = new cycle(fgetcsv($logdata, 1000, ","));
-	        } else if (strcmp(trim($line[0]), "time(sec)") === 0) {
-	        	//skip the title line for the entries section
-	        } else if (count($line) === 10) { // data line
-	        	$cycle->entries[] = implode(', ', $line);
-	        	//array_push($cycle->entries, implode(', ', $line));
-	        } else { // first 3 letters are 'NUL' or empty line either indicates the end of a cycle (all other cases)
-	        	if ($cycle !== null) {
-	        		sumbitCycle($cycle, $serialNum);
-	        	}      		
-        		//reset temps
-        		$cycle = null;
-			}
-	    }
-
-	    // in case end of file does not have an empty line at the end of the file, appends the last cycle.
-	    if ($cycle !== null) {
-    		sumbitCycle($cycle, $serialNum);
-    	} 
-	    fclose($logdata);
+	// Check that the file exists and that the filename is correctly formated, then open it
+	if(!preg_match('/logfile_\d{5}.(txt|csv)/i', $logfile)) {
+		die("Given filename is incorrectly formatted. <br/> Should follow the structure: 'logfile_00000.txt' or 'logfile_00000.csv' with the 0s representing a device's serial number.");
 	}
+	if(!file_exists($logfile)) {
+		die('The log file ' . $logfile . ' could not be found on the server.');
+	}
+	$logdata = fopen($logfile, "r");
+
+	// Parse the log file into the cycles, calculate the chlorine produced, and submit each cycle to the database
+	$serialNum = substr($logfile, 8, 5);
+	$producingCl = FALSE;
+	$cycle = null;
+    while (($line = fgetcsv($logdata, 1000, ",")) !== FALSE) {
+        if (strcmp(trim($line[0]), "salinity(g/l)") === 0) { // cycle title line
+        	// submit previous cycle 
+        	if ($cycle !== null) {
+	    		sumbitCycle($cycle, $serialNum);
+	    	}
+	    	// start new cycle
+        	$cycle = new cycle(fgetcsv($logdata, 1000, ","));
+        } else if (count($line) === 12) { // data line
+	    	$entryValues = $line;
+	    	// If cell 4 is reading a value greater than 0 then chlorine has started to be pumped out of the device since the previous entry. 
+	    	$cell4 = $entryValues[10];
+	    	$producingCl = $cell4 != 0;
+	    	$cycle->addEntries($entryValues, $producingCl);	
+	    }
+		//skip the entries title line and blank lines
+    }
+
+    // submits the last cycle in the file
+    if ($cycle !== null) {
+		sumbitCycle($cycle, $serialNum);
+	} 
+    fclose($logdata);
 
 //FUNCTIONS
 	// Takes a Cycle object and inserts its contents into the database
 	function sumbitCycle($cycle, $serialNum) {
+		die('did not submit to the database');
 //check to see if the cycle exists or not
 		//insert the cycle into the database and gets the cycleID from the database
 		$query = "CALL addCycle((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :salinity, :tempIn, :cell1, :cell2, :cell3, :totalCurrent, :startDateTime, @output); SELECT @ouptut;";
@@ -57,7 +66,6 @@
 				$entryBatch = array();
 			}
 			$entryBatch[] = $entry;
-			//array_push($entryBatch, $entry);
 		}
 		// inserts any remaining entries into the database
 		if (count($entryBatch) !== 0) {
@@ -89,38 +97,56 @@
 		public $entries;
 		public $salinity;
 		public $tempIn;
+		public $tempOut;
+		public $powerSupply;
 		public $cell1;
 		public $cell2;
 		public $cell3;
+		public $cell4;
 		public $totalCurrent;
 		public $dateTime;
-
-		// expects an array of starting values and an array of entries
-		function setValues($startValues, $entries) {
+		public $totalChlorineProduced;
+		
+		// Expects an array for $startValues with a cycle's start values in the following order:
+		// salinity(g/l), temp_in(C), temp_out(C), 12V Supply (V), CELL1 (A), CELL2(A), CELL3(A), CELL4(A), Total Current(A), DATE_TIME
+		public function __construct($startValues) {
 			$this->salinity = $startValues[0];
 			$this->tempIn = $startValues[1];
-			$this->cell1 = $startValues[2];
-			$this->cell2 = $startValues[3];
-			$this->cell3 = $startValues[4];
-			$this->totalCurrent = $startValues[5];
-			$this->dateTime = $startValues[6];
-			$this->entries = $entries;
+			$this->tempOut = $startValues[2];
+			$this->powerSupply = $startValues[3];
+			$this->cell1 = $startValues[4];
+			$this->cell2 = $startValues[5];
+			$this->cell3 = $startValues[6];
+			$this->cell4 = $startValues[7];
+			$this->totalCurrent = $startValues[8];
+			$this->dateTime = $startValues[9];
+			$this->totalChlorineProduced = 0;
+			$this->entries = array();			
 // NEED TO check cycle values for errors
 		}
 
-		public function __construct() {
-			$argv = func_get_args();
-		    switch(func_num_args()) {
-		        case 1:
-		            $this->setValues($argv[0], array());
-		            //echo 'constructor1: ' . var_dump($argv[0]) . '<br />';
-		            //self::__construct1($argv[0]);
-		            break;
-		        case 2:
-		        	$this->setValues($argv[0], $argv[1]);
-		        	echo 'constructor2: THIS WAS USED!!! <br />';
-		            //self::__construct2($argv[0], $argv[1]);
-		     }
+		// Expects an array for $entryValues with an entry's values in the following order:
+		// time(sec), salinity(g/l), flowrate(ml/min), duty_cycle(%), temp_in(C), temp_out(C), 12V supply(V), CELL1 (A), CELL2(A), CELL3(A), CELL4(A), TOTAL CURRENT(A)
+		// $producingCl is a boolean that indicates if the cycle has started pumping out chlorine
+		public function addEntries($entryValues, $producingCl) {
+			$updatedEntryValues = $entryValues;
+			if ($producingCl) {
+				// this entries time minus previous entries time, unless there is no previous entry
+				if (count($this->entries) == 0) {
+					$timeDifference = 0;
+				} else {
+					$timeDifference = $entryValues[0] - $this->entries[(count($this->entries) - 1)][0]; 	
+				}
+
+				$flowrate = $entryValues[2];
+				// ml of chlorine produced during the $timeDifference measured in seconds
+				$chlorineProduced = $flowrate * ($timeDifference / 60);
+				$this->totalChlorineProduced += $chlorineProduced;
+			} else {
+				$chlorineProduced = 0;
+			}
+			$updatedEntryValues[] = $chlorineProduced;
+			$this->entries[] = $updatedEntryValues;
 		}
 		
 	}
