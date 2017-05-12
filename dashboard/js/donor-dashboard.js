@@ -45,7 +45,6 @@ function initMap() {
         url: api,
         dataType: "json",
         method: "GET",
-        crossDomain: true,
         success: function(data) {
             console.log(data);
             populateMap(data);
