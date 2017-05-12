@@ -41,26 +41,24 @@ function initDevices() {
 // initMap is called in html when it calls to Google Maps API
 function initMap() {
     var api = "http://boneappletea.me/webservice/getDeviceLocations.php";
-    //
-    // $.ajax({
-    //     url: "http://boneappletea.me/webservice/getDeviceLocations.php",
-    //     dataType: "json",
-    //     method: "GET",
-    //     crossDomain: true,
-    //     success: function(data) {
-    //         console.log(data);
-    //         console.log("hello");
-    //         populateMap(data);
-    //     },
-    //     error: function(error) {
-    //         console.log(error);
-    //     }
-    // })
 
-    populateMap();
+    $.ajax({
+        url: api,
+        dataType: "json",
+        method: "GET",
+        crossDomain: true,
+        success: function(data) {
+            populateMap(data);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+
+    //populateMap();
 }
 
-function populateMap() {
+function populateMap(data) {
     var kenya = {lat: 0.0236, lng: 37.9062};
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 7,
@@ -68,7 +66,8 @@ function populateMap() {
         scrollwheel: false
     });
 
-    var data = [{"serialNum":"15340","city":"Cercadie","country":"Haiti","latitude":"18.5944","longitude":"-72.3074","deploymentDate":"2017-04-03"},{"serialNum":"15342","city":"Dadaab","country":"Kenya","latitude":"0.0925798","longitude":"40.3191","deploymentDate":"2017-04-03"},{"serialNum":"15344","city":"Wote","country":"Kenya","latitude":"-1.78863","longitude":"37.6333","deploymentDate":"2017-04-03"},{"serialNum":"15345","city":"Mombasa","country":"Kenya","latitude":"-4.04348","longitude":"39.6682","deploymentDate":"2017-04-03"},{"serialNum":"15347","city":"Port-au-Prince","country":"Haiti","latitude":"19.304","longitude":"-72.0379","deploymentDate":"2017-04-03"},{"serialNum":"15348","city":"Nairobi","country":"Kenya","latitude":"-1.29207","longitude":"36.8219","deploymentDate":"2017-04-03"}];
+    //var data = [{"serialNum":"15340","city":"Cercadie","country":"Haiti","latitude":"18.5944","longitude":"-72.3074","deploymentDate":"2017-04-03"},{"serialNum":"15342","city":"Dadaab","country":"Kenya","latitude":"0.0925798","longitude":"40.3191","deploymentDate":"2017-04-03"},{"serialNum":"15344","city":"Wote","country":"Kenya","latitude":"-1.78863","longitude":"37.6333","deploymentDate":"2017-04-03"},{"serialNum":"15345","city":"Mombasa","country":"Kenya","latitude":"-4.04348","longitude":"39.6682","deploymentDate":"2017-04-03"},{"serialNum":"15347","city":"Port-au-Prince","country":"Haiti","latitude":"19.304","longitude":"-72.0379","deploymentDate":"2017-04-03"},{"serialNum":"15348","city":"Nairobi","country":"Kenya","latitude":"-1.29207","longitude":"36.8219","deploymentDate":"2017-04-03"}];
+
     for (var i = 0; i < data.length; i++) {
         var device = data[i];
         devices.push(device);
