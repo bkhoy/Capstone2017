@@ -173,15 +173,24 @@ span {
 
 #map-overlay {
     float: left;
-    /* overflow: scroll; */
+}
+
+#map-overlay h2 {
+    text-align: center;
+}
+
+#scrollable-div {
+    overflow-y: scroll;
+    width: 360px;
+    height: 420px;
 }
 
 .device-block {
     max-width: 340px;
-    margin-left: 2em;
+    margin-left: 1.5em;
     padding: 1em;
     display: block;
-    margin-top: 1em;
+    margin-bottom: 0.5em;
 }
 
 .device-block img {
@@ -190,4 +199,8 @@ span {
 
 .device-block p {
     margin-top: 0.5em;
+}
+
+span {
+    font-size: 1em;
 }
