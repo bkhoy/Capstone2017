@@ -48,6 +48,7 @@ function initMap() {
         method: "GET",
         crossDomain: true,
         success: function(data) {
+            console.log(data);
             populateMap(data);
         },
         error: function(error) {
