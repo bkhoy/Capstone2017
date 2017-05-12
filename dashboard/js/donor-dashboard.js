@@ -9,11 +9,31 @@
 $(function() {
 
     initChart();
+    initMap();
 
 });
 
 
 function initMap() {
+
+    var api = "http://boneappletea.me/webservice/getDeviceLocations.php";
+
+    $.ajax({
+        url: api,
+        dataType: "json",
+        method: "GET",
+        crossDomain: true,
+        success: function(data) {
+            console.log("yay it worked");
+            console.log(data);
+            populateMap(data);
+        },
+        error: function(error) {
+            console.log("oops an error occurred");
+            console.log(error);
+        }
+    });
+
     var kenya = {lat: 0.0236, lng: 37.9062};
      var map = new google.maps.Map(document.getElementById('map'), {
          zoom: 8,
