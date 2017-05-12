@@ -21,7 +21,7 @@
 
 	// Gets $numCycles (int) of the most recent cycles for the device with the given $serialNum (int).  Returns the values as an array.
 	function getRecentDeviceCycles($serialNum, $numCycles) {
-		$query = 'SELECT startDateTime, startTempIn, startCell1, startCell2, startCell3, totalCurrent, errorID
+		$query = 'SELECT startDateTime, startTempIn, startTempOut, powerSupply, startCell1, startCell2, startCell3, startCell4, totalCurrent, totalChlorineProduced
 					FROM CYCLE c
 					JOIN DEVICE d ON d.deviceID = c.deviceID
 				    WHERE d.serialNum = :serialNum

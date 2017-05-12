@@ -6,13 +6,11 @@
 	authenticate();
 	
 	// Get all devices from the database
-	 $query = 'SELECT serialNum, city, country, placementDate FROM DEVICE d
-	JOIN LOCATION l on d.deviceID = l.deviceID';
-	// $query = 'SELECT serialNum, city, country, placementDate, startDateTime FROM DEVICE d
-	// JOIN LOCATION l on d.deviceID = l.deviceID
- //    JOIN CYCLE c on d.deviceID = c.deviceID
- //    ORDER BY startDateTime ASC
- //    LIMIT 1;';
+	$query = "SELECT serialNum, statusName AS 'status', city, country, placementDate AS 'deploymentDate', 
+				(SELECT startDateTime FROM CYCLE c WHERE c.cycleID = d.mostRecentCycle) AS 'mostRecentCycle'
+				FROM DEVICE d
+				JOIN LOCATION l ON d.deviceID = l.deviceID
+    			JOIN DEVICE_STATUS ds ON ds.statusID = d.deviceStatusID;";
 	$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 	$sth->execute();
 
@@ -24,10 +22,10 @@
 		$serialNum = $result['serialNum'];
 		$city = $result['city'];
 		$country = $result['country'];
-		$placementDate = $result['placementDate'];
-		$lastUsed = 'TEMP'; //$result['startDateTime'];
-		$status = 'Active';
-		$device = array('serialNum' => $serialNum, 'city' => $city, 'country' => $country, 'deploymentDate' => $placementDate, 'lastUsed' => $lastUsed, 'status' => 'status');
+		$deploymentDate = $result['deploymentDate'];
+		$status = $result['status'];
+		$mostRecentCycle = $result['mostRecentCycle'];
+		$device = array('serialNum' => $serialNum, 'status' => $status, 'city' => $city, 'country' => $country, 'deploymentDate' => $deploymentDate, 'mostRecentCycle' => $mostRecentCycle);
 		$output[] = $device;
 	}
 

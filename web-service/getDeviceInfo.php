@@ -10,16 +10,13 @@
 	}
 	$serialNum = $_GET['serialNum'];
 
-	// Get all devices from the database
-	$query = "SELECT serialNum, lastCleaned, useModeName, city, country, (SELECT startDateTime FROM CYCLE c
-			    JOIN DEVICE d ON d.deviceID = c.deviceID
-			    WHERE d.serialNum = :serialNum AND
-			    startDateTime IS NOT NULL
-			    ORDER BY startDateTime DESC
-			    LIMIT 1) AS 'lastCycle' FROM DEVICE d
-			    JOIN LOCATION l ON l.deviceID = d.deviceID
-			    JOIN USE_MODE u ON d.useModeID = u.useModeID 
-			    WHERE d.serialNum = :serialNum;";
+	// Get the device that matches the give serialNumber from the database
+		$query = "SELECT serialNum, statusName, useModeName, city, country, (SELECT startDateTime FROM CYCLE c
+						WHERE c.cycleID = d.mostRecentCycle) AS 'mostRecentCycle' FROM DEVICE d
+					JOIN LOCATION l ON l.deviceID = d.deviceID
+					JOIN USE_MODE u ON d.useModeID = u.useModeID
+					JOIN DEVICE_STATUS ds ON d.deviceStatusID = ds.statusID
+	    			WHERE d.serialNum = :serialNum;";
 	$sth = database()->prepare($query);
 	$sth->bindValue(':serialNum', $serialNum, PDO::PARAM_INT);
 	$sth->execute();
@@ -29,11 +26,11 @@
 	$results = $sth->fetchall();
 	foreach ($results as $result) {
 		$output['serialNum'] = $result['serialNum'];
-		$output['lastCleaned'] = $result['lastCleaned'];
+		$output['statusName'] = $result['statusName'];
 		$output['useModeName'] = $result['useModeName'];
 		$output['city'] = $result['city'];
 		$output['country'] = $result['country'];
-		$output['lastCycle'] = $result['lastCycle'];
+		$output['mostRecentCycle'] = $result['mostRecentCycle'];
 	}
 
 	// Get all users assoicated with this device
