@@ -12,7 +12,6 @@ var serialToLatLng = {};
 $(function() {
 
     initChart();
-    initDevices();
 
 });
 
@@ -31,8 +30,8 @@ function initDevices() {
             var span = ($(this).find("span"));
             var serialNum = span[0].innerHTML;
             var coordinates = serialToLatLng[serialNum];
-            var latLng = new google.maps.LatLng(coordinates[0], coordinates[1]); //Makes a latlng
-            map.panTo(latLng); //Make map global
+            var latLng = new google.maps.LatLng(coordinates[0], coordinates[1]); // Makes a latlng
+            map.panTo(latLng);
         });
         parent.append(div);
     }
@@ -48,15 +47,15 @@ function initMap() {
         success: function(data) {
             console.log(data);
             populateMap(data);
+            initDevices();
         },
         error: function(error) {
             console.log(error);
         }
     });
-    //populateMap();
 }
 
-function populateMap(data) {
+function populateMap() {
     var kenya = {lat: 0.0236, lng: 37.9062};
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 7,
@@ -64,7 +63,7 @@ function populateMap(data) {
         scrollwheel: false
     });
 
-    //var data = [{"serialNum":"15340","city":"Cercadie","country":"Haiti","latitude":"18.5944","longitude":"-72.3074","deploymentDate":"2017-04-03"},{"serialNum":"15342","city":"Dadaab","country":"Kenya","latitude":"0.0925798","longitude":"40.3191","deploymentDate":"2017-04-03"},{"serialNum":"15344","city":"Wote","country":"Kenya","latitude":"-1.78863","longitude":"37.6333","deploymentDate":"2017-04-03"},{"serialNum":"15345","city":"Mombasa","country":"Kenya","latitude":"-4.04348","longitude":"39.6682","deploymentDate":"2017-04-03"},{"serialNum":"15347","city":"Port-au-Prince","country":"Haiti","latitude":"19.304","longitude":"-72.0379","deploymentDate":"2017-04-03"},{"serialNum":"15348","city":"Nairobi","country":"Kenya","latitude":"-1.29207","longitude":"36.8219","deploymentDate":"2017-04-03"}];
+    var data = [{"serialNum":"15340","city":"Cercadie","country":"Haiti","latitude":"18.5944","longitude":"-72.3074","deploymentDate":"2017-04-03"},{"serialNum":"15342","city":"Dadaab","country":"Kenya","latitude":"0.0925798","longitude":"40.3191","deploymentDate":"2017-04-03"},{"serialNum":"15344","city":"Wote","country":"Kenya","latitude":"-1.78863","longitude":"37.6333","deploymentDate":"2017-04-03"},{"serialNum":"15345","city":"Mombasa","country":"Kenya","latitude":"-4.04348","longitude":"39.6682","deploymentDate":"2017-04-03"},{"serialNum":"15347","city":"Port-au-Prince","country":"Haiti","latitude":"19.304","longitude":"-72.0379","deploymentDate":"2017-04-03"},{"serialNum":"15348","city":"Nairobi","country":"Kenya","latitude":"-1.29207","longitude":"36.8219","deploymentDate":"2017-04-03"}];
 
     for (var i = 0; i < data.length; i++) {
         var device = data[i];
@@ -105,7 +104,7 @@ function initChart() {
                 pointRadius: 1,
                 pointHitRadius: 10,
                 data: [65, 59, 80, 81, 74, 77, 85], // data points go here
-                spanGaps: false, // If true, lines will be drawn between points with no or null data
+                spanGaps: false // If true, lines will be drawn between points with no or null data
             }
         ],
         xLabels: ['Apr 8', 'Apr 9', 'Apr 10', 'Apr 11', 'Apr 12', 'Apr 13', 'Apr 14'],
