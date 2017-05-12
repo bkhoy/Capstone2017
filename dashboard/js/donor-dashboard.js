@@ -6,18 +6,15 @@
 
 var devices = [];
 var map = null;
+var serialToLatLng = {};
 
 //Same thing as document.ready
 $(function() {
 
     initChart();
-
     initDevices();
 
 });
-
-var devices = [];
-var serialToLatLng = {};
 
 function initDevices() {
     var parent = $("#scrollable-div");
@@ -43,7 +40,6 @@ function initDevices() {
 
 // initMap is called in html when it calls to Google Maps API
 function initMap() {
-
     var api = "http://boneappletea.me/webservice/getDeviceLocations.php";
     //
     // $.ajax({
@@ -60,8 +56,6 @@ function initMap() {
     //         console.log(error);
     //     }
     // })
-
-
 
     populateMap();
 }
