@@ -2,48 +2,66 @@ USE SEFlow_dashboard;
 #Look up tables
 INSERT INTO ACCOUNT_TYPE (accountType, accountTypeDesc) VALUES
 	('donor', 'This user contributed to a SE-Flow device and can see information about the device they donate.'),
-	('super-user', 'This user can view detailed information about all devices.');
+	('admin', 'This user can view detailed information about all devices.');
+
+INSERT INTO ORGANIZATION (organizationName) VALUES
+	('World Vision'),
+    ('PATH'),
+    ('MSR GLOBAL HEALTH');
             
 INSERT INTO USE_MODE (useModeName, useModeDesc) VALUES
 	('IPC', 'This device is used primarily for Infection Prevention and Control situations, likely at a clinic'),
 	('Water Purfication', 'This device is used primarily for water purfication');
     
 INSERT INTO DEVICE_STATUS (statusName, statusDesc) VALUES
-	('Warning', 'This device is functioning but has a warning that should be addressed.'),
     ('Active', 'This device is functioning nomrally.'),
-    ('Error', 'This device is not functioning and has received an error.'),
-    ('Unknown' 'This device has not yet reported cycle informaiton or has not reported a cycle in over a year.');
+    ('Inactive', 'This device has not reported a cycle within the last month.'),
+    ('Unknown', 'This device has not reported any cycles.');
+
+INSERT INTO CYCLE_STATUS (statusName, isError, statusDesc) VALUES
+	('Hot Output Temperature', FALSE, 'Warning: The output temperature is between 50C and could cause a burn. Device will shut off if output reaches 60C.'),
+    ('Low Battery', FALSE, 'Warning: Power input is low please charge battery or check power supply. Device will shut down if voltage drops too low.'),
+    ('High Input Temperature', TRUE, 'Error: The input brine solution is too hot to use! A cooler brine solution is needed.'),
+    ('Low Input Temperature', TRUE, 'Error: The input brine solution is too cold to use! A warmer brine solution is needed.'),
+    ('High Output Temperature', TRUE, 'Error: Output temperature is too hot! Use a cooler input brine solution or decrease the salt concentration of the input brine solution.'),
+    ('Low Salt Concentration', TRUE, 'Error: The salt concentration of the input brine solution is too low! Add more salt to input brine solution.'),
+    ('HIgh Salt Concentration', TRUE, 'Error: The salt concentration of the input brine solution is too high! Decrease the salt concentration of the input brine solution.');
             
 #Test Data
-INSERT INTO DEVICE (useModeID, serialNum, lastCleaned) VALUES
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), '15348', '2017-05-01'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), '15345', '2017-05-01'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), '15344', '2017-03-01'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), '15342', '2017-05-01'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), '15347', '2017-05-01'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), '15340', '2015-01-01');
+INSERT INTO DEVICE (useModeID, deviceStatusID, serialNum) VALUES
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15348'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15345'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15344'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15342'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15347'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15340'),
+    ((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '16000');
     
-INSERT INTO LOCATION (deviceID, placementDate, city, country) VALUES
-	((SELECT deviceID FROM DEVICE WHERE deviceID = '15348'), '2017-04-03', 'Seattle', 'United States'),
-    #((SELECT deviceID FROM DEVICE WHERE deviceID = '15348'), '2017-04-03', 'Seattle', 'United States'),
-    ((SELECT deviceID FROM DEVICE WHERE deviceID = '15345'), '2017-04-03', 'Seattle', 'United States'),
-    ((SELECT deviceID FROM DEVICE WHERE deviceID = '15344'), '2017-04-03', 'Seattle', 'United States'),
-    ((SELECT deviceID FROM DEVICE WHERE deviceID = '15342'), '2017-04-03', 'Seattle', 'United States'),
-    ((SELECT deviceID FROM DEVICE WHERE deviceID = '15347'), '2017-04-03', 'Seattle', 'United States'),
-    ((SELECT deviceID FROM DEVICE WHERE deviceID = '15340'), '2017-04-03', 'Seattle', 'United States');
+INSERT INTO LOCATION (deviceID, placementDate, city, country, latitude, longitude) VALUES
+	((SELECT deviceID FROM DEVICE WHERE serialNum = 15348), '2017-04-03', 'Nairobi', 'Kenya', -1.2920659, 36.8219462),
+    ((SELECT deviceID FROM DEVICE WHERE serialNum = 15345), '2017-04-03', 'Mombasa', 'Kenya', -4.0434771, 39.6682065),
+    ((SELECT deviceID FROM DEVICE WHERE serialNum = 15345), '2017-01-03', 'Nairobi', 'Kenya', -1.2920659, 36.8219462),
+    ((SELECT deviceID FROM DEVICE WHERE serialNum = 15344), '2017-04-03', 'Wote', 'Kenya', -1.788625, 37.63333960000001),
+    ((SELECT deviceID FROM DEVICE WHERE serialNum = 15344), '2017-01-03', 'Nairobi', 'Kenya', -1.2920659, 36.8219462),
+    ((SELECT deviceID FROM DEVICE WHERE serialNum = 15342), '2017-04-03', 'Dadaab', 'Kenya', 0.09257979999999999, 40.3190719),
+    ((SELECT deviceID FROM DEVICE WHERE serialNum = 15347), '2017-04-03', 'Port-au-Prince', 'Haiti', 19.3039935, -72.0379277),
+    ((SELECT deviceID FROM DEVICE WHERE serialNum = 15340), '2017-04-03', 'Cercadie', 'Haiti', 18.594395, -72.3074326);
+
+INSERT INTO USER (accountTypeID, organizationID, fName, lName, email) VALUES
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'admin'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'MSR Global Health'), 'Jake', 'Wheeler', 'admin@msr.com'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Sarah', 'Smith', 'ssmith@gmail.com'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'PATH'),'Imelda', 'Hayes', 'erat@commodo.co.uk'), 
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'PATH'), 'Veronica', 'Alford', 'tempus.lacinia@mattisInteger.ca'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'PATH'),'Tyler', 'Erickson', 'amet.ante@dolor.org'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Bert', 'Calderon', 'tincidunt.aliquam@Fusce.com'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Ori', 'Garner', 'dignissim.tempor@enimnislelementum.org'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Fuller', 'Levy', 'dui.Fusce@Sedegetlacus.net'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Renee', 'David', 'quam@tortor.com'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Nasim', 'Cline', 'gravida.non@ornare.org'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Leonard', 'Fields', 'orci@arcuVestibulum.edu'),
+	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), (SELECT organizationID FROM ORGANIZATION WHERE organizationName = 'World Vision'), 'Lewis', 'Berg', 'at@sem.co.uk');
 
 INSERT INTO USER (accountTypeID, fName, lName, email) VALUES
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Sarah', 'Smith', 'ssmith@gmail.com'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Imelda', 'Hayes', 'erat@commodo.co.uk'), 
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Veronica', 'Alford', 'tempus.lacinia@mattisInteger.ca'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Tyler', 'Erickson', 'amet.ante@dolor.org'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Bert', 'Calderon', 'tincidunt.aliquam@Fusce.com'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Ori', 'Garner', 'dignissim.tempor@enimnislelementum.org'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Fuller', 'Levy', 'dui.Fusce@Sedegetlacus.net'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Renee', 'David', 'quam@tortor.com'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Nasim', 'Cline', 'gravida.non@ornare.org'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Leonard', 'Fields', 'orci@arcuVestibulum.edu'),
-	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Lewis', 'Berg', 'at@sem.co.uk'),
 	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Sylvia', 'Ayers', 'sit@dolorDonecfringilla.com'),
 	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Odessa', 'Colon', 'mi.eleifend.egestas@tristiqueac.com'),
 	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Kiayada', 'Santana', 'semper@sed.com'),

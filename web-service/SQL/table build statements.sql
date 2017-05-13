@@ -5,32 +5,39 @@ USE SEFlow_dashboard;
 CREATE TABLE ORGANIZATION (
 	organizationID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     organizationName varchar(50) NOT NULL,
-    organizationDesc varchar(300)
+    organizationDesc varchar(500)
 );
     
 CREATE TABLE ACCOUNT_TYPE (
 	accountTypeID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     accountType varchar(50) NOT NULL,
-    accountTypeDesc varchar(300)
+    accountTypeDesc varchar(500)
 );
 
 CREATE TABLE USE_MODE (
 	useModeID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     useModeName varchar(50) NOT NULL,
-    useModeDesc varchar(300)
+    useModeDesc varchar(500)
 );
 
 CREATE TABLE DEVICE_STATUS (
 	statusID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    statusName varchar(30) NOT NULL,
-    statusDesc varchar(300)
+    statusName varchar(50) NOT NULL,
+    statusDesc varchar(500)
+);
+
+CREATE TABLE CYCLE_STATUS (
+	cycleStatusID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    statusName varchar(50),
+    isError boolean,
+    statusDesc varchar(500)
 );
 
 CREATE TABLE USER (
 	userID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     organizationID int,
     accountTypeID int,
-    email varchar(50),
+    email varchar(100) UNIQUE,
     fName varchar(50),
     lName varchar(50),
     FOREIGN KEY(organizationID) REFERENCES ORGANIZATION(organizationID),
@@ -40,24 +47,25 @@ CREATE TABLE USER (
 CREATE TABLE DEVICE (
 	deviceID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     useModeID int NOT NULL,
-    statusID int NOT NULL,
-    serialNum int NOT NULL,
-    lastCleaned date,
-    deviceDesc varchar(300),
-    photoFileName varchar(100),
+    deviceStatusID int NOT NULL,
+    mostRecentCycle int,
+    serialNum int NOT NULL UNIQUE,
+    deviceDesc varchar(500),
+    photoFileName varchar(50),
     FOREIGN KEY(useModeID) REFERENCES USE_MODE(useModeID),
-    FOREIGN KEY(statusID) REFERENCES DEVICE_STATUS (statusID)
+    FOREIGN KEY(deviceStatusID) REFERENCES DEVICE_STATUS (statusID)
+    #FOREIGN KEY(mostRecentCycle) REFERENCES CYCLE(cycleID)
 );
 
 CREATE TABLE LOCATION (
 	locationID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     deviceID int NOT NULL,
-    city varchar(100),
-    country varchar(100),
+    city varchar(50),
+    country varchar(50) NOT NULL,
     longitude float,
     latitude float,
-    placementDate datetime,
-    locationDesc varchar(300),
+    placementDate date,
+    locationDesc varchar(500),
     FOREIGN KEY(deviceID) REFERENCES DEVICE(deviceID)
 );
 
@@ -69,41 +77,41 @@ CREATE TABLE USER_DEVICE (
     FOREIGN KEY(deviceID) REFERENCES DEVICE(deviceID)
 );
 
-CREATE TABLE ERROR (
-	errorID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    errorNum int  NOT NULL,
-    errorName varchar(50) NOT NULL,
-    errorDesc varchar(300)
-);
-
 CREATE TABLE CYCLE (
 	cycleID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     deviceID int NOT NULL,
-    errorID int,
-    startDateTime DATETIME,
+    cycleStatusID int,
+    startDateTime DATETIME NOT NULL,
     startSalinity int,
-    startTempIn int,
-    startCell1 double,
-    startCell2 double,
-    startCell3 double,
-    totalCurrent double,
+    startTempIn int NOT NULL,
+    startTempOut int NOT NULL,
+    powerSupply float NOT NULL,
+    startCell1 float NOT NULL,
+    startCell2 float NOT NULL,
+    startCell3 float NOT NULL,
+    startCell4 float NOT NULL,
+    totalCurrent float NOT NULL,
+    totalChlorineProduced float NOT NULL,
     FOREIGN KEY(deviceID) REFERENCES DEVICE(deviceID), 
-    FOREIGN KEY(errorID) REFERENCES ERROR(errorID)
+    FOREIGN KEY(cycleStatusID) REFERENCES CYCLE_STATUS(cycleStatusID)
 );
 
 CREATE TABLE ENTRY (
 	entryID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     cycleID int NOT NULL,
     seconds time NOT NULL,
-    salinity int NOT NULL,
+    salinity int,
     flowrate int NOT NULL,
+    dutyCycle int NOT NULL,
     tempIn int NOT NULL,
     tempOut int NOT NULL,
-    supply int NOT NULL,
-    cell1 int NOT NULL,
-    cell2 int NOT NULL,
-    cell3 int NOT NULL,
-    cell4 int NOT NULL,
+    powerSupply float NOT NULL,
+    cell1 float NOT NULL,
+    cell2 float NOT NULL,
+    cell3 float NOT NULL,
+    cell4 float NOT NULL,
+    totalCurrent float NOT NULL,
+    chlorineProduced float NOT NULL,
     FOREIGN KEY(cycleID) REFERENCES CYCLE(cycleID)
 );
 
