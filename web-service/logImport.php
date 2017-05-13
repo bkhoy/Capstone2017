@@ -1,4 +1,5 @@
 <?php
+// is there a way to set this based on how many lines are in the given file?
 	ini_set('max_execution_time', 5000);
 
 	// Imports global functions
@@ -31,14 +32,14 @@
 	    	}
 	    	// start new cycle
         	$cycle = new cycle(fgetcsv($logdata, 1000, ","));
-        } else if (count($line) === 12) { // data line
+        } else if (count($line) === 12  && strcmp(trim($line[0]), "time(sec)") !== 0) { // data line
 	    	$entryValues = $line;
 	    	// If cell 4 is reading a value greater than 0 then chlorine has started to be pumped out of the device since the previous entry. 
 	    	$cell4 = $entryValues[10];
 	    	$producingCl = $cell4 != 0;
 	    	$cycle->addEntries($entryValues, $producingCl);	
 	    }
-		//skip the entries title line and blank lines
+		//skip the entries title lines and blank lines
     }
 
     // submits the last cycle in the file
@@ -50,12 +51,16 @@
 //FUNCTIONS
 	// Takes a Cycle object and inserts its contents into the database
 	function sumbitCycle($cycle, $serialNum) {
-		die('did not submit to the database');
 //check to see if the cycle exists or not
 		//insert the cycle into the database and gets the cycleID from the database
-		$query = "CALL addCycle((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :salinity, :tempIn, :cell1, :cell2, :cell3, :totalCurrent, :startDateTime, @output); SELECT @ouptut;";
+		$query = "CALL addCycle((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :startDateTime, :salinity, :tempIn, :tempOut, :powerSupply, :cell1, :cell2, :cell3, :cell4, :totalCurrent, :chlorineProduced, @output); SELECT @ouptut;";
 		$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-		$sth->execute(array(':serialNum' => $serialNum, ':salinity' => $cycle->salinity, ':tempIn' => $cycle->tempIn, ':cell1' => $cycle->cell1, ':cell2' => $cycle->cell2, ':cell3' => $cycle->cell3, ':totalCurrent' => $cycle->totalCurrent, ':startDateTime' => $cycle->dateTime));
+		$sth->execute(array(':serialNum' => $serialNum, ':startDateTime' => $cycle->dateTime,
+							':salinity' => $cycle->salinity, ':tempIn' => $cycle->tempIn, 
+							':tempOut' => $cycle->tempOut, ':powerSupply' => $cycle->powerSupply, 
+							':cell1' => $cycle->cell1, ':cell2' => $cycle->cell2, 
+							':cell3' => $cycle->cell3, 'cell4' => $cycle->cell4, 
+							':totalCurrent' => $cycle->totalCurrent, ':chlorineProduced' => $cycle->totalChlorineProduced));
 		$cycleID = $sth->fetch()[0];
 
 		// insert the cycle's entries into the database in batches of 1000
@@ -81,10 +86,15 @@
 		$queryValues = [':cycleID' => $cycleID];
 		// loops through each element in the $entires array and appends an insert query for that element to $query. Then adds that elements values to the $queryValues array with the corresponding variable names.
 		for ($i=0; $i < $count; $i++) {
-			$entry = str_getcsv($entries[$i]);
-			$query .= "INSERT INTO ENTRY (cycleID, seconds, salinity, flowrate, tempIN, tempOut, supply, cell1, cell2, cell3, cell4) VALUES
-						((SELECT cycleID FROM CYCLE WHERE cycleID = :cycleID), :seconds" . $i . ", :salinity" . $i . ", :flowrate" . $i . ", :tempIn" . $i . ", :tempOut" . $i . ", :supply" . $i . ", :cell1" . $i . ", :cell2" . $i . ", :cell3" . $i . ", :cell4" . $i . ");";
-			$entryValues = [(':seconds' . $i) => $entry[0], (':salinity' . $i) => $entry[1], (':flowrate' . $i) => $entry[2], (':tempIn' . $i) => $entry[3], (':tempOut' . $i) => $entry[4], (':supply' . $i) => $entry[5], (':cell1' . $i) => $entry[6], (':cell2' . $i) => $entry[7], (':cell3' . $i) => $entry[8], (':cell4' . $i) => $entry[9]];
+			$entry = $entries[$i];
+			$query .= "CALL addEntries(:cycleID, :seconds" . $i . ", :salinity" . $i . 
+						", :flowrate" . $i . ", :dutyCycle" . $i . 
+						", :tempIn" . $i . ", :tempOut" . $i . 
+						", :supply" . $i . ", :cell1" . $i . 
+						", :cell2" . $i . ", :cell3" . $i . 
+						", :cell4" . $i . ", :totalCurrent" . $i . 
+						", :chlorineProduced" . $i . ");";
+			$entryValues = [(':seconds' . $i) => $entry[0], (':salinity' . $i) => $entry[1], (':flowrate' . $i) => $entry[2], ('dutyCycle' . $i) => $entry[3], (':tempIn' . $i) => $entry[4], (':tempOut' . $i) => $entry[5], (':supply' . $i) => $entry[6], (':cell1' . $i) => $entry[7], (':cell2' . $i) => $entry[8], (':cell3' . $i) => $entry[9], (':cell4' . $i) => $entry[10], (':totalCurrent' . $i) => $entry[11], (':chlorineProduced' . $i) => $entry[12]];
 			$queryValues = array_merge($queryValues, $entryValues);
 		}
 		$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
@@ -120,7 +130,7 @@
 			$this->cell4 = $startValues[7];
 			$this->totalCurrent = $startValues[8];
 			$this->dateTime = $startValues[9];
-			$this->totalChlorineProduced = 0;
+			$this->totalChlorineProduced = 0.0;
 			$this->entries = array();			
 // NEED TO check cycle values for errors
 		}
@@ -131,7 +141,7 @@
 		public function addEntries($entryValues, $producingCl) {
 			$updatedEntryValues = $entryValues;
 			if ($producingCl) {
-				// this entries time minus previous entries time, unless there is no previous entry
+				// this entry's time minus previous entry's time, unless there is no previous entry
 				if (count($this->entries) == 0) {
 					$timeDifference = 0;
 				} else {
@@ -140,10 +150,10 @@
 
 				$flowrate = $entryValues[2];
 				// ml of chlorine produced during the $timeDifference measured in seconds
-				$chlorineProduced = $flowrate * ($timeDifference / 60);
+				$chlorineProduced = $flowrate * ($timeDifference / 60.0);
 				$this->totalChlorineProduced += $chlorineProduced;
 			} else {
-				$chlorineProduced = 0;
+				$chlorineProduced = 0.0;
 			}
 			$updatedEntryValues[] = $chlorineProduced;
 			$this->entries[] = $updatedEntryValues;
