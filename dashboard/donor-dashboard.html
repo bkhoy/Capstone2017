@@ -42,25 +42,15 @@
     <div id="map-wrapper">
         <div id="map-overlay">
             <h2>View your devices...</h2>
-
+            <!-- scrollable section where donor's devices will be listed. left side of map -->
             <div id="scrollable-div">
-                <!--<div class="device-block">-->
-                    <!--<img src="./img/seflow_setup.png">-->
-                    <!--<p>This device has produced over 150mL of chlorine and has been running for 29 days.</p>-->
-                <!--</div>-->
-                <!--<div class="device-block">-->
-                    <!--<img src="./img/seflow_setup.png">-->
-                    <!--<p>This device has produced over 150mL of chlorine and has been running for 29 days.</p>-->
-                <!--</div>-->
-                <!--<div class="device-block">-->
-                    <!--<img src="./img/seflow_setup.png">-->
-                    <!--<p>This device has produced over 150mL of chlorine and has been running for 29 days.</p>-->
-                <!--</div>-->
             </div>
         </div>
+        <!-- Google Map -->
         <div id="map"></div>
     </div>
 
+    <!-- Graph -->
     <div id="chart-container" class="container">
         <div id="graph">
             <canvas id="myChart"></canvas>
@@ -98,7 +88,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/donor-dashboard.js" type="text/javascript"></script>
 
-    <!-- change API key if needed -->
+    <!-- change API key if needed. current API key is from boneappleteauw@gmail.com -->
     <script async
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx2hhNKoonV8JvqKc2knbmRtaWy5st9zE&callback=initMap">
     </script>
