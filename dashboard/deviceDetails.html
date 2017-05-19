@@ -10,14 +10,122 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/superusers.css"/>
+    <link rel="stylesheet" href="css/details.css"/>
 </head>
 <body>
+    <nav>
+        <ul>
+            <li class="left_links"> <a href="#"><img id="logo" src="img/msr-logo.png"></a></li>
+            <li class="right_links"> <a href="#">Home</a></li>
+            <li class="right_links"> <a href="#">Account</a></li>
+        </ul>
+    </nav>
+
+    <div id="main" class="container">
+
+        <h3>Device Summary</h3>
+        <div class="summary box row">
+            <table class="table table-striped">
+                <tr>
+                    <th>Status</th>
+                    <th>Serial Number</th>
+                    <th>Location</th>
+                    <th>Last Used</th>
+                </tr>
+                <tr>
+                    <td> <img src="img/warning.svg"> </td>
+                    <td> SE123456 </td>
+                    <td> Nairobi, Kenya </td>
+                    <td> 05/15/2017 15:00 PST</td>
+                </tr>
+            </table>
+
+        </div>
+
+        <h3>Recent Cycle Status</h3>
+        <div class="recent-status box row">
+            <h4>
+                The output temperature is higher than 50&#8451; and could cause a burn.
+                Device will shut off if output reaches 60&#8451;.
+            </h4>
+        </div>
+
+        <h3>Past Cycle Statuses</h3>
+        <div class="cycles box row">
+            <table class="table table-striped">
+                <tr>
+                    <th></th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Runtime</th>
+                    <th>Status Description</th>
+                </tr>
+                <tr>
+                    <td> <img src="img/warning.svg"> </td>
+                    <td>Warning</td>
+                    <td>05/15/2017 14:45 PST</td>
+                    <td>9:02:00</td>
+                    <td>The output temperature is higher than 50&#8451; and could cause a burn.
+                        Device will shut off if output reaches 60&#8451;.</td>
+                </tr>
+                <tr>
+                    <td> <img src="img/warning.svg"> </td>
+                    <td>Warning</td>
+                    <td>05/15/2017 14:45 PST</td>
+                    <td>9:02:00</td>
+                    <td>The output temperature is higher than 50&#8451; and could cause a burn.
+                        Device will shut off if output reaches 60&#8451;.</td>
+                </tr>
+                <tr>
+                    <td> <img src="img/warning.svg"> </td>
+                    <td>Warning</td>
+                    <td>05/15/2017 14:45 PST</td>
+                    <td>9:02:00</td>
+                    <td>The output temperature is higher than 50&#8451; and could cause a burn.
+                        Device will shut off if output reaches 60&#8451;.</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <h3>Chlorine Production</h3>
+        <!-- Graph -->
+        <div id="chart-container" class="box row">
+            <div id="graph">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+
+        <h3>Download data</h3>
+        <div class="box row">
+            <form>
+                <div class="date-box">
+                    Cycle start date
+                    <input type="date" name="start-date">
+                </div>
+                <div class="date-box">
+                    Cycle end date
+                    <input type="date" name="end-date">
+                </div>
+
+                <div class="date-box checkbox">
+                    <label> <input type="checkbox" value=""> All cycle logs </label>
+                </div>
+
+                <div class="date-box">
+                    <input type="submit" name="submit">
+                </div>
+            </form>
+
+        </div>
+
+    </div>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <!-- load libraries -->
+    <script src="js/Chart.min.js"></script>
     <script src="lib/jquery-3.2.0.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/superusers.js" type="text/javascript"></script>
+    <script src="js/details.js" type="text/javascript"></script>
 </body>
 </html>

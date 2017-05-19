@@ -1,0 +1,78 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    top: 0;
+    width: 100%;
+    background-color: lightgray;
+    position: absolute;
+    font-size: 16px;
+    z-index: 1;
+}
+
+li a {
+    color: black;
+}
+
+nav ul {
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0.5em 1.5em;
+}
+
+th, td {
+    text-align: center;
+}
+
+#logo {
+    margin-left: 0;
+    text-align: left;
+    max-height: 30px;
+}
+
+.left_links {
+    float:left;
+}
+
+.right_links {
+    float: right;
+}
+
+.box {
+    border: 1px black solid;
+    box-shadow: 5px 5px 5px #d2d2d2;
+}
+
+#main {
+    margin-top: 50px;
+}
+
+.row {
+    padding: 20px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+#graph {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img {
+    max-height: 1.5em;
+}
+
+th {
+    font-style: normal;
+}
+
+.date-box {
+    display: inline-block;
+    margin-right: 3em;
+}
