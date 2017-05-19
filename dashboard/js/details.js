@@ -6,6 +6,8 @@
 // runs this block of code when the page is ready/loaded
 $(function() {
 
+    $("#cycles").DataTable();
+
     initChart();
 
     // initializes the chart. uses Chart.js library.
