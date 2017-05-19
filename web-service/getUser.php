@@ -1,9 +1,8 @@
 <?php
-	// Retreives a list of all devices in the database and returns them as a JSON file.
+	// Retreives the details of a user's account as a JSON file.
 	
 	// Imports global functions
 	require('functions.php');
-	authenticate();
 
 	if (!isset($_GET['email'])) {
 		die('Must pass an email.');

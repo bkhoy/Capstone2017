@@ -1,6 +1,5 @@
 <?php
 	// Global functions used accross the web service.
-	authenticate();
 
 //FUNCTIONS
 	// Creates and returns a new PDO object connected to the SEFlow_dashboard database
@@ -10,27 +9,49 @@
 		return $db;
 	}
 
-	// Checks to make sure that the user is authenticated.  If they are not authenticated, then they are sent back to the login page.  If they are, php script is allowed to run.
-	function authenticate() {
-		$authenticated = true;
-		if(!$authenticated) {
-			header("Location: https://www.boneappletea.me");
-			exit();
-		}
-	}
-
 	// Gets $numCycles (int) of the most recent cycles for the device with the given $serialNum (int).  Returns the values as an array.
 	function getRecentDeviceCycles($serialNum, $numCycles) {
-		$query = 'SELECT startDateTime, startTempIn, startTempOut, powerSupply, startCell1, startCell2, startCell3, startCell4, totalCurrent, totalChlorineProduced
+		$query = "SELECT c.startDateTime, MAX(seconds) AS 'runtime', totalChlorineProduced, 
+						(SELECT statusName FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusName', 
+						(SELECT statusDesc FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusDesc',
+						(SELECT isError FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'isError'
 					FROM CYCLE c
 					JOIN DEVICE d ON d.deviceID = c.deviceID
-				    WHERE d.serialNum = :serialNum
-				    ORDER BY startDateTime DESC
-				    LIMIT :numCycles;';
+					JOIN ENTRY e ON c.cycleID = e.cycleID
+					WHERE d.serialNum = :serialNum
+					GROUP BY e.cycleID
+					ORDER BY startDateTime DESC
+					LIMIT :numCycles;";
 		$sth = database()->prepare($query);
 		$sth->bindValue(':serialNum', $serialNum, PDO::PARAM_INT);
 		$sth->bindValue(':numCycles', $numCycles, PDO::PARAM_INT);
 		$sth->execute();
-		return $sth->fetchall();
+
+		$results = $sth->fetchall();
+		$output = array();
+		foreach ($results as $result) {
+			$cycle = array();
+			$cycle['startDateTime'] = $result['startDateTime'];
+			$cycle['runtime'] = $result['runtime'];
+			$cycle['totalChlorineProduced'] = $result['totalChlorineProduced'];
+			
+			if (is_null($result['statusName'])) {
+				$cycle['statusName'] = 'Completed';
+				$cycle['statusDesc'] = 'This cycle ran successfully and did not throw any errors or warnings.';
+			} else {
+				$cycle['statusName'] = $result['statusName'];
+				$cycle['statusDesc'] = $result['statusDesc'];
+			}
+			
+			if (is_null($result['isError'])) {
+				$cycle['isError'] = FALSE;
+			} else {
+				$cycle['isError'] = $result['isError'];
+			}
+			
+			$output[] = $cycle;
+		}
+
+		return $output;
 	}
 ?>
