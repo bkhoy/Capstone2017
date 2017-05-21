@@ -13,8 +13,7 @@
 	function getRecentDeviceCycles($serialNum, $numCycles) {
 		$query = "SELECT c.startDateTime, MAX(seconds) AS 'runtime', totalChlorineProduced, 
 						(SELECT statusName FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusName', 
-						(SELECT statusDesc FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusDesc',
-						(SELECT isError FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'isError'
+						(SELECT statusDesc FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusDesc'
 					FROM CYCLE c
 					JOIN DEVICE d ON d.deviceID = c.deviceID
 					JOIN ENTRY e ON c.cycleID = e.cycleID
@@ -41,12 +40,6 @@
 			} else {
 				$cycle['statusName'] = $result['statusName'];
 				$cycle['statusDesc'] = $result['statusDesc'];
-			}
-			
-			if (is_null($result['isError'])) {
-				$cycle['isError'] = FALSE;
-			} else {
-				$cycle['isError'] = $result['isError'];
 			}
 			
 			$output[] = $cycle;
