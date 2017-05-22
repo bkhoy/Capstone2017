@@ -17,10 +17,30 @@
     <nav>
         <ul>
             <li class="left_links"> <a href="#"><img id="logo" src="img/msr-logo.png"></a></li>
-            <li class="right_links"> <a href="#">Home</a></li>
-            <li class="right_links"> <a href="#">Account</a></li>
+            <li class="right_links"> <a href="#" data-toggle="modal" data-target="#myModal">Account</a></li>
         </ul>
     </nav>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">My Account</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <div id="main" class="container">
 
@@ -37,10 +57,10 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td> <img src="img/warning.svg"> </td>
-                    <td> SE123456 </td>
-                    <td> Nairobi, Kenya </td>
-                    <td> 05/15/2017 15:00 PST</td>
+                    <td id="status"> </td>
+                    <td id="serialNum"></td>
+                    <td id="location"></td>
+                    <td id="last-used"></td>
                 </tr>
                 </tbody>
             </table>
@@ -49,10 +69,8 @@
 
         <h3>Recent Cycle Status</h3>
         <div class="recent-status box row">
-            <h4>
-                The output temperature is higher than 50&#8451; and could cause a burn.
-                Device will shut off if output reaches 60&#8451;.
-            </h4>
+            <h3 id="cycle-status">
+            </h3>
         </div>
 
         <h3>Past Cycle Statuses</h3>
@@ -67,35 +85,13 @@
                     <th>Status Description</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td> <img src="img/warning.svg"> </td>
-                    <td>Warning</td>
-                    <td>05/11/2017 14:45 PST</td>
-                    <td>2:22:14</td>
-                    <td>The output temperature is higher than 50&#8451; and could cause a burn.
-                        Device will shut off if output reaches 60&#8451;.</td>
-                </tr>
-                <tr>
-                    <td> <img src="img/inactive.svg"> </td>
-                    <td>Inactive</td>
-                    <td>05/15/2000 14:45 PST</td>
-                    <td>10:12:22</td>
-                    <td>The device has not been used (but how do we know that?).</td>
-                </tr>
-                <tr>
-                    <td> <img src="img/error.svg"> </td>
-                    <td>Error</td>
-                    <td>05/15/2017 14:45 PST</td>
-                    <td>19:10:11</td>
-                    <td>Help, I think I broke my SE Flow. Send some help pls!</td>
-                </tr>
+                <tbody id="cycles-tbody">
                 </tbody>
             </table>
         </div>
 
 
-        <h3>Chlorine Production</h3>
+        <h3>Chlorine Production per Cycle</h3>
         <!-- Graph -->
         <div id="chart-container" class="box row">
             <div id="graph">
