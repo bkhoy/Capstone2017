@@ -1,10 +1,9 @@
 <?php
 // is there a way to set this based on how many lines are in the given file?
-	ini_set('max_execution_time', 5000);
+	ini_set('max_execution_time', 50000);
 
 	// Imports global functions
 	require('functions.php');
-	authenticate();
 
 	// Get the name of the log file
 	if(!isset($_GET['logfile'])) {
@@ -12,7 +11,7 @@
 	}
 	$logfile = $_GET['logfile'];
 	// Check that the file exists and that the filename is correctly formated, then open it
-	if(!preg_match('/logfile_\d{5}.(txt|csv)/i', $logfile)) {
+	if(!preg_match('/(logfile|logdata)_\d{5}.(txt|csv)/i', $logfile)) {
 		die("Given filename is incorrectly formatted. <br/> Should follow the structure: 'logfile_00000.txt' or 'logfile_00000.csv' with the 0s representing a device's serial number.");
 	}
 	if(!file_exists($logfile)) {
@@ -53,14 +52,15 @@
 	function sumbitCycle($cycle, $serialNum) {
 //check to see if the cycle exists or not
 		//insert the cycle into the database and gets the cycleID from the database
-		$query = "CALL addCycle((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :startDateTime, :salinity, :tempIn, :tempOut, :powerSupply, :cell1, :cell2, :cell3, :cell4, :totalCurrent, :chlorineProduced, @output); SELECT @ouptut;";
+		$query = "CALL addCycle((SELECT deviceID FROM DEVICE WHERE DEVICE.serialNum = :serialNum), :startDateTime, :salinity, :tempIn, :tempOut, :powerSupply, :cell1, :cell2, :cell3, :cell4, :totalCurrent, :chlorineProduced, :cycleStatus, @output); SELECT @ouptut;";
 		$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 		$sth->execute(array(':serialNum' => $serialNum, ':startDateTime' => $cycle->dateTime,
 							':salinity' => $cycle->salinity, ':tempIn' => $cycle->tempIn, 
 							':tempOut' => $cycle->tempOut, ':powerSupply' => $cycle->powerSupply, 
 							':cell1' => $cycle->cell1, ':cell2' => $cycle->cell2, 
 							':cell3' => $cycle->cell3, 'cell4' => $cycle->cell4, 
-							':totalCurrent' => $cycle->totalCurrent, ':chlorineProduced' => $cycle->totalChlorineProduced));
+							':totalCurrent' => $cycle->totalCurrent, ':chlorineProduced' => $cycle->totalChlorineProduced,
+							':cycleStatus' => $cycle->cycleStatus));
 		$cycleID = $sth->fetch()[0];
 
 		// insert the cycle's entries into the database in batches of 1000
@@ -116,6 +116,7 @@
 		public $totalCurrent;
 		public $dateTime;
 		public $totalChlorineProduced;
+		public $cycleStatus;
 		
 		// Expects an array for $startValues with a cycle's start values in the following order:
 		// salinity(g/l), temp_in(C), temp_out(C), 12V Supply (V), CELL1 (A), CELL2(A), CELL3(A), CELL4(A), Total Current(A), DATE_TIME
@@ -131,8 +132,11 @@
 			$this->totalCurrent = $startValues[8];
 			$this->dateTime = $startValues[9];
 			$this->totalChlorineProduced = 0.0;
-			$this->entries = array();			
-// NEED TO check cycle values for errors
+			$this->entries = array();
+			$this->cycleStatus = '';
+
+			// Check cycle values for errors/warnings
+			updateCycleStatus($this->tempOut, $this->tempIn, null, $this->powerSupply);
 		}
 
 		// Expects an array for $entryValues with an entry's values in the following order:
@@ -157,7 +161,41 @@
 			}
 			$updatedEntryValues[] = $chlorineProduced;
 			$this->entries[] = $updatedEntryValues;
+
+			// Check entry values for errors/warnings
+			updateCycleStatus($entryValues[5], $entryValues[4], $entryValues[2], $entryValues[6]);
 		}
-		
+
+		// Updates this cycle's status. Errors will overwrite Warnings and any previous Errors.
+		public function updateCycleStatus($tempOut, $tempIn, $flowrate, $powerSupply) {
+			$result = '';
+			
+			// Warning Checks
+			if (!is_null($powerSupply) && 10.5 < $powerSupply && $powerSupply <= 11.3) {
+				$result = 'Low Battery';
+			} elseif (!is_null($tempOut) && 50 <= $tempOut) {
+				$result = 'Hot Output Temperature';
+			}
+
+			// Error checkcs
+			if (!is_null($flowrate) && $flowrate < 40) {
+				$result = 'Low Salt Concentration';
+			} elseif (!is_null($flowrate) && $flowrate > 60) {
+				$result = 'High Salt Concentration';
+			} elseif (!is_null($tempIn) && $tempIn < 5) {
+				$result = 'Low Input Temperature';
+			} elseif (!is_null($tempIn) && $tempIn >= 35) {
+				$result = 'High Input Temperature';
+			} elseif (!is_null($tempOut) && 60 <= $tempOut) {
+				$result = 'High Output Temperature';
+			}
+
+			// Update cycle status
+			if(strcmp('', $result) === 0) {
+				$this->status = $newStatus;
+			}
+		}
+
+
 	}
 ?>
