@@ -3,14 +3,15 @@
 	
 	// Imports global functions
 	require('functions.php');
-	authenticate();
 	
 	// Get all devices from the database
-	$query = "SELECT serialNum, statusName AS 'status', city, country, placementDate AS 'deploymentDate', 
-				(SELECT startDateTime FROM CYCLE c WHERE c.cycleID = d.mostRecentCycle) AS 'mostRecentCycle'
+	$query = "SELECT serialNum, statusName AS 'status', city, country, MAX(placementDate) AS 'placementDate',
+					MAX(startDateTime) AS 'mostRecentCycle' 
 				FROM DEVICE d
 				JOIN LOCATION l ON d.deviceID = l.deviceID
-    			JOIN DEVICE_STATUS ds ON ds.statusID = d.deviceStatusID;";
+			    JOIN CYCLE c ON c.deviceID = d.deviceID
+			    JOIN DEVICE_STATUS ds ON ds.statusID = d.deviceStatusID
+			    GROUP BY d.deviceID;";
 	$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 	$sth->execute();
 
@@ -22,10 +23,11 @@
 		$serialNum = $result['serialNum'];
 		$city = $result['city'];
 		$country = $result['country'];
-		$deploymentDate = $result['deploymentDate'];
+		$placementDate = $result['placementDate'];
 		$status = $result['status'];
 		$mostRecentCycle = $result['mostRecentCycle'];
-		$device = array('serialNum' => $serialNum, 'status' => $status, 'city' => $city, 'country' => $country, 'deploymentDate' => $deploymentDate, 'mostRecentCycle' => $mostRecentCycle);
+		$device = array('serialNum' => $serialNum, 'status' => $status, 'city' => $city, 'country' => $country,
+						'placementDate' => $placementDate, 'mostRecentCycle' => $mostRecentCycle);
 		$output[] = $device;
 	}
 
