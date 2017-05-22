@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    font-family: "Source Sans Pro", "sans-serif";
 }
 
 nav {
@@ -56,4 +57,23 @@ th, td {
     padding: 20px;
     margin-top: 25px;
     margin-bottom: 25px;
+}
+
+#graph {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img {
+    max-height: 1.5em;
+}
+
+th {
+    font-style: normal;
+}
+
+.date-box {
+    display: inline-block;
+    margin-right: 3em;
 }
