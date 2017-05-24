@@ -16,7 +16,7 @@ $(function() {
 
                 var table = $('.table');
                 for (var i = 0; i < data.length; i++) {
-                    var link = GET_ALL_DEVICES + data[i].serialNum;
+                    var link = GET_DEVICE_DETAILS + data[i].serialNum;
                     var tr = $('<tr></tr>');
                     table.append(tr);
                     $(tr).append("<td><img src='img/active.svg'</td>");
