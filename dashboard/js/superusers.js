@@ -2,7 +2,7 @@
 
 $(function() {
     const GET_ALL_DEVICES = "http://boneappletea.me/webservice/getAllDevices.php";
-    const GET_DEVICE_DETAILS = "http://boneappletea.me/webservice/getDeviceInfo.php?serialNum=15348";
+    const GET_DEVICE_DETAILS = "http://boneappletea.me/webservice/getDeviceInfo.php?serialNum=";
 
     //displays list of all devices
     function getAllDevices() {
@@ -16,10 +16,11 @@ $(function() {
 
                 var table = $('.table');
                 for (var i = 0; i < data.length; i++) {
+                    var link = GET_ALL_DEVICES + data[i].serialNum;
                     var tr = $('<tr></tr>');
                     table.append(tr);
                     $(tr).append("<td><img src='img/active.svg'</td>");
-                    tr.append($('<td>' + data[i].serialNum + '</td>'));
+                    tr.append($('<td><a href=link >' + data[i].serialNum + '</a></td>'));
                     tr.append($('<td>' + data[i].mostRecentCycle + '</td>'));
                     tr.append($('<td>' + data[i].placementDate + '</td>'));
                     tr.append($('<td>' + data[i].city + '</td>'));
