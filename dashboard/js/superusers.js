@@ -2,7 +2,7 @@
 
 $(function() {
     const GET_ALL_DEVICES = "http://boneappletea.me/webservice/getAllDevices.php";
-    const GET_DEVICE_DETAILS = "http://boneappletea.me/webservice/getDeviceInfo.php?serialNum=";
+    const GET_DEVICE_DETAILS = "http://boneappletea.me/deviceDetails.html?serialNum=";
 
     //displays list of all devices
     function getAllDevices() {
