@@ -20,7 +20,7 @@ $(function() {
                     var tr = $('<tr></tr>');
                     table.append(tr);
                     $(tr).append("<td><img src='img/active.svg'</td>");
-                    tr.append($('<td><a href=link >' + data[i].serialNum + '</a></td>'));
+                    tr.append($('<td><a href="' + link + '" >' + data[i].serialNum + '</a></td>'));
                     tr.append($('<td>' + data[i].mostRecentCycle + '</td>'));
                     tr.append($('<td>' + data[i].placementDate + '</td>'));
                     tr.append($('<td>' + data[i].city + '</td>'));
