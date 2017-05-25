@@ -2,29 +2,43 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Source Sans Pro", "sans-serif";
+    background-color: #F4F4F4;
 }
 
 nav {
     top: 0;
     width: 100%;
-    background-color: lightgray;
+    background-color: #555555;
     position: absolute;
     font-size: 16px;
     z-index: 1;
 }
 
 li a {
-    color: black;
+    color: white;
 }
 
 nav ul {
-    padding: 0;
+    text-align: center;
 }
 
 nav ul li {
+    float: none;
     display: inline-block;
     margin: 0.5em 1.5em;
+    padding-top: 0.5em;
 }
+
+nav ul li a:hover{
+    color: #c8102e;
+    text-decoration: none;
+}
+
+nav ul li a:visit, nav ul li a:link{
+    color: #c8102e;
+    text-decoration: none;
+}
+
 
 th, td {
     text-align: center;
@@ -45,8 +59,8 @@ th, td {
 }
 
 .box {
-    border: 1px black solid;
-    box-shadow: 5px 5px 5px #d2d2d2;
+    box-shadow: 2px 2px 2px #d2d2d2;
+    background-color: white;
 }
 
 #main {
