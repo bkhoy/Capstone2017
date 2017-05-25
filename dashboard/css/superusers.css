@@ -77,3 +77,19 @@ th {
     display: inline-block;
     margin-right: 3em;
 }
+
+.statuses {
+    float: left;
+    display: inline-block;
+    margin: 1em;
+    text-align: center;
+}
+
+.statuses img {
+    max-height: 3em;
+}
+
+.status-border {
+    border-right: 1px solid #000;
+    padding-right: 2em;
+}
