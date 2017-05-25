@@ -12,7 +12,6 @@ body {
 
 nav {
     width: 100%;
-    /*background-color: white;*/
     position: absolute;
     font-size: 16px;
     z-index: 1;
@@ -150,6 +149,18 @@ nav ul li a:visit, nav ul li a:link{
     width: 150px;
 }
 
+#how-section {
+    text-align: center;
+}
+
+#how-section h1{
+    text-align: center;
+}
+
+#how-image{
+    max-width: 80%;
+}
+
 #sponsors {
     text-align: center;
     margin-left: auto;
@@ -166,6 +177,8 @@ nav ul li a:visit, nav ul li a:link{
 
 #donate {
     background-image: url("../img/children-donate.jpg");
+    background-size: cover; 
+    background-repeat: no-repeat;;
     background-position: top left;
     background-attachment: fixed;
     margin-top: 3em;
