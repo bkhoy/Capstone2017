@@ -7,7 +7,7 @@ use SEFlow_dashboard;
 		JOIN LOCATION l ON l.deviceID = d.deviceID
 		JOIN USE_MODE u ON d.useModeID = u.useModeID
 		JOIN DEVICE_STATUS ds ON d.deviceStatusID = ds.statusID
-        JOIN CYCLE c ON c.deviceID = d.deviceID
+        LEFT OUTER JOIN CYCLE c ON c.deviceID = d.deviceID
 		WHERE d.serialNum = '15347'
         GROUP BY d.deviceID;
 
@@ -29,7 +29,7 @@ use SEFlow_dashboard;
 	SELECT serialNum, statusName AS 'status', city, country, MAX(placementDate) AS 'placementDate', MAX(startDateTime) AS 'mostRecentCycle'
 		FROM DEVICE d
 		JOIN LOCATION l ON d.deviceID = l.deviceID
-		JOIN CYCLE c ON c.deviceID = d.deviceID
+		LEFT OUTER JOIN CYCLE c ON c.deviceID = d.deviceID
 		JOIN DEVICE_STATUS ds ON ds.statusID = d.deviceStatusID
 		GROUP BY d.deviceID;
 
@@ -47,8 +47,7 @@ use SEFlow_dashboard;
 	#getRecentDeviceCycles() - get the 10 most recent cycles for a device
 		SELECT c.startDateTime, MAX(seconds) AS 'runtime', totalChlorineProduced, 
 			(SELECT statusName FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusName', 
-			(SELECT statusDesc FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusDesc',
-			(SELECT isError FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'isError'
+			(SELECT statusDesc FROM CYCLE_STATUS cs WHERE cs.cycleStatusID = c.cycleStatusID) AS 'statusDesc'
 		FROM CYCLE c
 		JOIN DEVICE d ON d.deviceID = c.deviceID
 		JOIN ENTRY e ON c.cycleID = e.cycleID
@@ -62,3 +61,25 @@ use SEFlow_dashboard;
 	SELECT serialNum, city, country, longitude, latitude, MAX(placementDate) AS 'placementDate' FROM DEVICE d
 		JOIN LOCATION l on d.deviceID = l.deviceID
 		GROUP BY serialNum;
+        
+#getDeviceLog.php
+	#getDeviceEntries
+    SELECT c.cycleID,
+		c.startSalinity, c.startTempIn, c.startTempOut, c.powerSupply AS 'startPowerSupply', c.startCell1, c.startCell2, c.startCell3, c.startCell4, c.totalCurrent AS 'startTotalCurrent', c.startDateTime,
+        e.entryID, TIME_TO_SEC(e.seconds) AS 'seconds', e.salinity, e.flowrate, e.dutyCycle, e.tempIn, e.tempOut, e.powerSupply, e.cell1, e.cell2, e.cell3, e.cell4, e.totalCurrent
+	FROM CYCLE c
+	JOIN DEVICE	d ON d.deviceID = c.deviceID
+    LEFT OUTER JOIN ENTRY e ON e.cycleID = c.cycleID
+    WHERE d.serialNum = 16000
+    ORDER BY c.startDateTime;
+    
+    #getDeviceEntriesByDate
+    SELECT c.cycleID,
+		c.startSalinity, c.startTempIn, c.startTempOut, c.powerSupply AS 'startPowerSupply', c.startCell1, c.startCell2, c.startCell3, c.startCell4, c.totalCurrent AS 'startTotalCurrent', c.startDateTime,
+        e.entryID, TIME_TO_SEC(e.seconds) AS 'seconds', e.salinity, e.flowrate, e.dutyCycle, e.tempIn, e.tempOut, e.powerSupply, e.cell1, e.cell2, e.cell3, e.cell4, e.totalCurrent
+	FROM CYCLE c
+	JOIN DEVICE	d ON d.deviceID = c.deviceID
+    LEFT OUTER JOIN ENTRY e ON e.cycleID = c.cycleID
+    WHERE d.serialNum = 16000
+    AND c.startDateTime BETWEEN '2017-01-01' AND '2017-01-09'
+    ORDER BY c.startDateTime;

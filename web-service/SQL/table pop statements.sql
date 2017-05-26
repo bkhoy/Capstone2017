@@ -14,28 +14,30 @@ INSERT INTO USE_MODE (useModeName, useModeDesc) VALUES
 	('Water Purfication', 'This device is used primarily for water purfication');
     
 INSERT INTO DEVICE_STATUS (statusName, statusDesc) VALUES
-    ('Active', 'This device is functioning nomrally.'),
+    ('Active', 'This device is functioning normally.'),
     ('Inactive', 'This device has not reported a cycle within the last month.'),
-    ('Unknown', 'This device has not reported any cycles.');
+    ('Unknown', 'This device has not reported any cycles.'),
+    ('Warning', 'This device\'s most recent cycle had a warning during the cycle.'),
+    ('Error', 'This device\'s most recent cycle ended with in an error.');
 
 INSERT INTO CYCLE_STATUS (statusName, isError, statusDesc) VALUES
-	('Hot Output Temperature', FALSE, 'Warning: The output temperature is between 50C and could cause a burn. Device will shut off if output reaches 60C.'),
-    ('Low Battery', FALSE, 'Warning: Power input is low please charge battery or check power supply. Device will shut down if voltage drops too low.'),
-    ('High Input Temperature', TRUE, 'Error: The input brine solution is too hot to use! A cooler brine solution is needed.'),
-    ('Low Input Temperature', TRUE, 'Error: The input brine solution is too cold to use! A warmer brine solution is needed.'),
-    ('High Output Temperature', TRUE, 'Error: Output temperature is too hot! Use a cooler input brine solution or decrease the salt concentration of the input brine solution.'),
-    ('Low Salt Concentration', TRUE, 'Error: The salt concentration of the input brine solution is too low! Add more salt to input brine solution.'),
-    ('HIgh Salt Concentration', TRUE, 'Error: The salt concentration of the input brine solution is too high! Decrease the salt concentration of the input brine solution.');
+	('Warning: Hot Output Temperature', FALSE, 'The output temperature is between 50C and could cause a burn. Device will shut off if output reaches 60C.'),
+    ('Warning: Low Battery', FALSE, 'Power input is low please charge battery or check power supply. Device will shut down if voltage drops too low.'),
+    ('Error: High Input Temperature', TRUE, 'The input brine solution is too hot to use! A cooler brine solution is needed.'),
+    ('Error: Low Input Temperature', TRUE, 'The input brine solution is too cold to use! A warmer brine solution is needed.'),
+    ('Error: High Output Temperature', TRUE, 'Output temperature is too hot! Use a cooler input brine solution or decrease the salt concentration of the input brine solution.'),
+    ('Error: Low Salt Concentration', TRUE, 'The salt concentration of the input brine solution is too low! Add more salt to input brine solution.'),
+    ('Error: High Salt Concentration', TRUE, 'The salt concentration of the input brine solution is too high! Decrease the salt concentration of the input brine solution.');
             
 #Test Data
-INSERT INTO DEVICE (useModeID, deviceStatusID, serialNum) VALUES
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15348'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15345'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15344'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15342'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15347'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '15340'),
-    ((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Active'), '16000');
+INSERT INTO DEVICE (useModeID, deviceStatusID, serialNum, photoFileName) VALUES
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15348', 'device1.jpg'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15345', 'device2.jpg'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15344', 'device3.jpg'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15342', 'device4.jpg'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15347', 'device5.jpg'),
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15340', 'device2.jpg'),
+    ((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '16000', 'device3.jpg');
     
 INSERT INTO LOCATION (deviceID, placementDate, city, country, latitude, longitude) VALUES
 	((SELECT deviceID FROM DEVICE WHERE serialNum = 15348), '2017-04-03', 'Nairobi', 'Kenya', -1.2920659, 36.8219462),
