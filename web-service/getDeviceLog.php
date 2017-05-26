@@ -91,48 +91,56 @@
 	fclose($file);
 
 	//redirect browser to file for download
-	//header('location: ' . $fileName);
+	header('location: ' . $fileName);
 
 // FUNCTIONS
 	// returns all of the entries for a device with both the cycle and entry values
 	function getDeviceEntries($serialNum) {
-		$query = "SELECT c.cycleID, c.startSalinity, c.startTempIn, c.startTempOut, c.powerSupply AS 'startPowerSupply', c.startCell1,
-						c.startCell2, c.startCell3, c.startCell4, c.totalCurrent AS 'startTotalCurrent', c.startDateTime,
-				        e.entryID, TIME_TO_SEC(e.seconds) AS 'seconds', e.salinity, e.flowrate, e.dutyCycle,
-				        e.tempIn, e.tempOut, e.powerSupply, e.cell1, e.cell2, e.cell3, e.cell4, e.totalCurrent
-					FROM CYCLE c
-					JOIN DEVICE	d ON d.deviceID = c.deviceID
-				    LEFT OUTER JOIN ENTRY e ON e.cycleID = c.cycleID
-				    WHERE d.serialNum = :serialNum
-				    ORDER BY c.startDateTime
-				    LIMIT 2000;";
-		$sth = database()->prepare($query);
-		$sth->bindValue(':serialNum', $serialNum, PDO::PARAM_INT);
-		$sth->execute();
+		try {
+			$query = "SELECT c.cycleID, c.startSalinity, c.startTempIn, c.startTempOut, c.powerSupply AS 'startPowerSupply', c.startCell1,
+							c.startCell2, c.startCell3, c.startCell4, c.totalCurrent AS 'startTotalCurrent', c.startDateTime,
+					        e.entryID, TIME_TO_SEC(e.seconds) AS 'seconds', e.salinity, e.flowrate, e.dutyCycle,
+					        e.tempIn, e.tempOut, e.powerSupply, e.cell1, e.cell2, e.cell3, e.cell4, e.totalCurrent
+						FROM CYCLE c
+						JOIN DEVICE	d ON d.deviceID = c.deviceID
+					    LEFT OUTER JOIN ENTRY e ON e.cycleID = c.cycleID
+					    WHERE d.serialNum = :serialNum
+					    ORDER BY c.startDateTime
+					    LIMIT 2000;";
+			$sth = database()->prepare($query);
+			$sth->bindValue(':serialNum', $serialNum, PDO::PARAM_INT);
+			$sth->execute();
 
-		return $sth->fetchall();
+			return $sth->fetchall();
+		} catch (Exception $e) {
+			return errorMessage($e->getMessage());
+		}
 	}
 
 	// returns all of the entries for a device with both the cycle and entry values between a date range
 	function getDeviceEntriesByDate($serialNum, $startDate, $endDate) {
-		$query = "SELECT c.cycleID,	c.startSalinity, c.startTempIn, c.startTempOut, c.powerSupply AS 'startPowerSupply', c.startCell1,
-						c.startCell2, c.startCell3, c.startCell4, c.totalCurrent AS 'startTotalCurrent', c.startDateTime,
-			        	e.entryID, TIME_TO_SEC(e.seconds) AS 'seconds', e.salinity, e.flowrate, e.dutyCycle,
-			        	e.tempIn, e.tempOut, e.powerSupply, e.cell1, e.cell2, e.cell3, e.cell4, e.totalCurrent
-				FROM CYCLE c
-				JOIN DEVICE	d ON d.deviceID = c.deviceID
-			    LEFT OUTER JOIN ENTRY e ON e.cycleID = c.cycleID
-			    WHERE d.serialNum = :serialNum
-			    AND c.startDateTime BETWEEN :startDate AND :endDate
-			    ORDER BY c.startDateTime
-			    LIMIT 2000;";
-		$sth = database()->prepare($query);
-		$sth->bindValue(':serialNum', $serialNum, PDO::PARAM_INT);
-		$sth->bindValue(':startDate', $startDate, PDO::PARAM_STR);
-		$sth->bindValue(':endDate', $endDate, PDO::PARAM_STR);
-		$sth->execute();
+		try {
+			$query = "SELECT c.cycleID,	c.startSalinity, c.startTempIn, c.startTempOut, c.powerSupply AS 'startPowerSupply', c.startCell1,
+							c.startCell2, c.startCell3, c.startCell4, c.totalCurrent AS 'startTotalCurrent', c.startDateTime,
+				        	e.entryID, TIME_TO_SEC(e.seconds) AS 'seconds', e.salinity, e.flowrate, e.dutyCycle,
+				        	e.tempIn, e.tempOut, e.powerSupply, e.cell1, e.cell2, e.cell3, e.cell4, e.totalCurrent
+					FROM CYCLE c
+					JOIN DEVICE	d ON d.deviceID = c.deviceID
+				    LEFT OUTER JOIN ENTRY e ON e.cycleID = c.cycleID
+				    WHERE d.serialNum = :serialNum
+				    AND c.startDateTime BETWEEN :startDate AND :endDate
+				    ORDER BY c.startDateTime
+				    LIMIT 2000;";
+			$sth = database()->prepare($query);
+			$sth->bindValue(':serialNum', $serialNum, PDO::PARAM_INT);
+			$sth->bindValue(':startDate', $startDate, PDO::PARAM_STR);
+			$sth->bindValue(':endDate', $endDate, PDO::PARAM_STR);
+			$sth->execute();
 
-		return $sth->fetchall();
+			return $sth->fetchall();
+		} catch (Exception $e) {
+			return errorMessage($e->getMessage());
+		}
 	}
 
 ?>
