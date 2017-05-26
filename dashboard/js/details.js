@@ -68,10 +68,11 @@ $(function() {
 
         var numOfCycles = 10;
 
-        xAxisLabels = [];
-        chlorine = [];
+        var xAxisLabels = [];
+        var chlorine = [];
         for (var i = 0; i < 10; i++) {
-            xAxisLabels.push(device.cycles[i].startDateTime);
+            var date = new Date(device.cycles[i].startDateTime);
+            xAxisLabels.push(date.toLocaleDateString() + ", " + date.toLocaleTimeString());
             chlorine.push(device.cycles[i].totalChlorineProduced);
         }
 
@@ -81,7 +82,7 @@ $(function() {
             labels: xAxisLabels,
             datasets: [
                 {
-                    label: "mL of chlorine produced",
+                    label: "L of chlorine produced",
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1,
@@ -94,7 +95,7 @@ $(function() {
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'Chlorine Produced (mL)'
+                        labelString: 'Chlorine Produced (L)'
                     }
                 }],
                 xAxes: [{
@@ -106,7 +107,7 @@ $(function() {
             },
             title: {
                 display: true,
-                text: "Chlorine Produced per Cycle",
+                text: "Chlorine Produced in last " + numOfCycles + " Cycles",
                 fontSize: 16
             }
         };
