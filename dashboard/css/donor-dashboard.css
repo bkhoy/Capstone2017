@@ -4,10 +4,11 @@ body {
 }
 
 #map {
-    width: 70%;
+    width: 50%;
     height: 500px;
     background-color: grey;
     margin-left: auto;
+    display: inline-block;
 }
 
 nav {
@@ -97,10 +98,6 @@ nav ul li a:visit, nav ul li a:link{
 
 #chart-container {
     margin-bottom: 10em;
-}
-
-#myChart {
-    padding: 3em;
 }
 
 #landing-image {
@@ -242,22 +239,22 @@ nav ul li a:visit, nav ul li a:link{
 }
 
 #scrollable-div {
-    overflow-y: scroll;
-    width: 360px;
-    height: 420px;
+    overflow-x: scroll;
+    max-height: 200px;
+    width: 100%;
+    white-space: nowrap;
 }
 
 .device-block {
     max-width: 340px;
-    margin-left: 1.5em;
     padding: 1em;
-    display: block;
     margin-bottom: 0.5em;
     cursor: pointer;
+    display: inline-block;
 }
 
 .device-block img {
-    max-width: 260px;
+    max-width: 200px;
 }
 
 .device-block p {
@@ -271,7 +268,7 @@ span {
 .btn, .btn.active, .btn:active {
     background-color: #c8102e;
     border: none;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .btn a,.btn a:visited,.btn a:link, .btn a:active {
@@ -282,4 +279,38 @@ span {
 .btn:hover {
     background-color: #e8102f;
     text-decoration: none;
+}
+
+#graph {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+#device-description-div {
+    display: inline-block;
+    width: 100%;
+}
+#device-description-div img {
+    max-width: 240px;
+    display: inline;
+    float: left;
+}
+
+#device-description-div p {
+    display: inline;
+    width: 50%;
+    float: left;
+    margin-left: 1em;
+}
+
+#description-graph {
+    padding: 2em;
+    width: 49%;
+    float: left;
+}
+
+#map-graph {
+    background-color: white;
+    min-height: 720px;
 }

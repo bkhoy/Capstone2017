@@ -28,7 +28,7 @@
         <button type="button" class="btn btn-primary btn-lg"><a href="#devices">SEE YOUR IMPACT</a></button>
         </div>
         <!--<div id="left">-->
-            <!--<h2>You have donated to <br>  <strong> <span>6</span> devices </strong></h2>-->
+            <!--<h2>You have donated to <br>  <strong> <span>6</span> DEVICES </strong></h2>-->
         <!--</div>-->
         <!--<div id="right">-->
             <!--<h2>You have impacted <br> <strong> <span>150</span> lives </strong> </h2>-->
@@ -46,23 +46,37 @@
         <h2>Explore how your devices are changing the world! </h2>
     </div>
 
-    <div id="map-wrapper">
-        <div id="map-overlay">
-            <h2>View your devices...</h2>
-            <!-- scrollable section where donor's devices will be listed. left side of map -->
-            <div id="scrollable-div">
+    <div id="map-graph">
+        <div id="scrollable-div">
+        </div>
+        <div id="description-graph">
+            <div id="device-description-div">
+                <img src='./img/seflow_setup.png'>
+                <p id="description"></p>
+            </div>
+            <div id="graph">
+                <canvas id="myChart"></canvas>
             </div>
         </div>
-        <!-- Google Map -->
         <div id="map"></div>
     </div>
 
-    <!-- Graph -->
-    <div id="chart-container" class="container">
-        <div id="graph">
-            <canvas id="myChart"></canvas>
-        </div>
+    <div id="map-wrapper">
+        <!--<div id="map-overlay">-->
+            <!--<h2>View your DEVICES...</h2>-->
+            <!--&lt;!&ndash; scrollable section where donor's DEVICES will be listed. left side of map &ndash;&gt;-->
+            <!--<div id="scrollable-div">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!-- Google Map -->
     </div>
+
+    <!--&lt;!&ndash; Graph &ndash;&gt;-->
+    <!--<div id="chart-container" class="container">-->
+        <!--<div id="graph">-->
+            <!--<canvas id="myChart"></canvas>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div id="donate" class="container">
         <div id="donate-text">
