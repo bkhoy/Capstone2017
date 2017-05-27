@@ -27,8 +27,11 @@
 	}
 
 	// create csv
-	$fileName = 'log_downloads\logfile_' . $serialNum . '.csv';
-	$file = fopen($fileName, 'w');
+	$fileName = 'logfile_' . $serialNum . '.csv';
+	header('Content-Type: application/csv');
+    header('Content-Disposition: attachment; filename="'. $fileName.'";');
+	$file = fopen('php://output', 'w');
+
 	$currentCycleID = null;
 	$cycleTitleValues = ['salinity(g/l)', 'temp_in(C)', 'temp_out(C)', '12V_Supply(V)', 'CELL1(A)', 'CELL2(A)', 'CELL3(A)', 'CELL4(A)', 'Total_Current(A)', 'DATE_TIME'];
 	$entryTitleValues = ['time(sec)', 'salinity(g/l)', 'flowrate(ml/min)', 'duty_cycle(%)', 'temp_in(C)', 'temp_out(C)', '12V supply(V)', 'CELL1(A)', 'CELL2(A)', 'CELL3(A)', 'CELL4(A)', 'TOTAL_CURRENT(A)'];
@@ -53,15 +56,9 @@
 			fwrite($file, implode($delimiter, $cycleTitleValues) . "\n");
 			fwrite($file, implode($delimiter, $line) . "\n");
 
-			// fputcsv($file, []); //empty line
-			// fputcsv($file, $cycleTitleValues);
-			// fputcsv($file, $line, ',', ' ');
-
 			if (!is_null($result['entryID'])) {
 				fwrite($file, "\n");
 				fwrite($file, implode($delimiter, $entryTitleValues) . "\n");
-				// fputcsv($file, []); //empty line
-				// fputcsv($file, $entryTitleValues);
 			}
 
 			// update $currentCycleID
@@ -85,13 +82,9 @@
 
 			//write the entry values to the file
 			fwrite($file, implode($delimiter, $line) . "\n");
-			//fputcsv($file, $line);
 		}
 	}
 	fclose($file);
-
-	//redirect browser to file for download
-	header('location: ' . $fileName);
 
 // FUNCTIONS
 	// returns all of the entries for a device with both the cycle and entry values
