@@ -9,6 +9,10 @@ $(function() {
     var serialNum = getSerialNum();
     const GET_DEVICE_INFO = "./webservice/getDeviceInfo.php?serialNum=" + serialNum;
 
+    // hard coded email for now
+    var email = "admin@msr.com";
+    const GET_ACCOUNT_INFO = "./webservice/getUser.php?email=" + email;
+
     $('#logDownloadForm').submit( function(e) {
         e.preventDefault();
         logDownload();
@@ -28,6 +32,23 @@ $(function() {
         }
     });
 
+    // populate the Account modal
+    $.ajax({
+        url: GET_ACCOUNT_INFO,
+        dataType: "json",
+        method: "GET",
+        success: function(account) {
+            var p = $("<p></p>");
+            var text = "Name: " + account.fname + " " + account.lname + "<br>" + "Email: " + account.email;
+            p.html(text);
+            $(".modal-body").html(p);
+        },
+        error: function(error) {
+            $(".modal-body").html("<p>Sorry, your account information could not be retrieved right now.</p>");
+        }
+    });
+
+    // grabs all device info to populate the page
     $.ajax({
         url: GET_DEVICE_INFO,
         dataType: "json",
@@ -48,9 +69,9 @@ $(function() {
         }
     });
 
+    // Initialize the device summary row
     function initDeviceSummary(device) {
         $("#status").html("<img src='img/" + device.statusName.toLowerCase() + ".svg'>");
-
         $("#serialNum").html(device.serialNum);
         $("#location").html(device.city + ", " + device.country);
         if (device.cycles.length != 0) {

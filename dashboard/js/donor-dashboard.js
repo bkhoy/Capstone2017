@@ -13,6 +13,29 @@ var map = null;
 var currDevice = null;
 var myBarChart = null;
 
+$(function(){
+    // hard coded email for now
+    var email = "ssmith@gmail.com";
+    const GET_ACCOUNT_INFO = "./webservice/getUser.php?email=" + email;
+
+    // populate the Account modal
+    $.ajax({
+        url: GET_ACCOUNT_INFO,
+        dataType: "json",
+        method: "GET",
+        success: function(account) {
+            var p = $("<p></p>");
+            var text = "Name: " + account.fname + " " + account.lname + "<br>" + "Email: " + account.email;
+            p.html(text);
+            $(".modal-body").html(p);
+        },
+        error: function(error) {
+            $(".modal-body").html("<p>Sorry, your account information could not be retrieved right now.</p>");
+        }
+    });
+
+});
+
 // initiatives the list of DEVICES on the left side of the map
 // requires that the DEVICES list is populated (meaning a successful call to the server)
 function initDeviceList() {
@@ -204,3 +227,4 @@ function removeData() {
     myBarChart.data.datasets.length = [];
     myBarChart.update();
 }
+
