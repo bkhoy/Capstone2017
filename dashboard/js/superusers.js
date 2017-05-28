@@ -1,8 +1,8 @@
 'use strict';
 
 $(function() {
-    const GET_ALL_DEVICES = "http://boneappletea.me/webservice/getAllDevices.php";
-    const GET_DEVICE_DETAILS = "http://boneappletea.me/deviceDetails.html?serialNum=";
+    const GET_ALL_DEVICES = "./webservice/getAllDevices.php";
+    const GET_DEVICE_DETAILS = "./deviceDetails.html?serialNum=";
 
     //displays list of all devices
     function getAllDevices() {

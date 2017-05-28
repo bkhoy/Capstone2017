@@ -65,7 +65,7 @@ function updateMap() {
 
 // initMap is called in html when it calls to Google Maps API
 function initMap() {
-    var api = "http://boneappletea.me/webservice/getUserDevices.php?email=ssmith%40gmail.com";
+    var api = "./webservice/getUserDevices.php?email=ssmith%40gmail.com";
     $.ajax({
         url: api,
         dataType: "json",
