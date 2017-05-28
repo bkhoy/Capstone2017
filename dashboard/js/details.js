@@ -6,35 +6,8 @@
 // runs this block of code when the page is ready/loaded
 $(function() {
 
-    const SERIAL_NUM = '15340'; //For testing purposes
-    // hard coded device info for now
-    const GET_DEVICE_INFO = "./webservice/getDeviceInfo.php?serialNum=" + serialNum;
-
-
-    // URL looks like this : .../deviceDetails.html?serialNum=
-    function getSerialNum() {
-        //Only takes the URL text AFTER "?"
-        var query = window.location.search.substring(1);
-
-        //Checks if there's multiple parameters
-        //If true, then return an emtpy string
-        //(At this moment, we don't need multiple parameters)
-        if (query.includes("&")) {
-            return "";
-        }
-
-        var pair = query.split("=");
-        if (pair[0].toLowerCase() != "serialnum") {
-            return ""; //for error handling, check if serialNum = ""
-        }
-
-        //if function is able to get all the way here,
-        //return the value of serialNum
-        return pair[1];
-    }
-    
-    //on load, gets the param
     var serialNum = getSerialNum();
+    const GET_DEVICE_INFO = "./webservice/getDeviceInfo.php?serialNum=" + serialNum;
 
     $('#logDownloadForm').submit( function(e) {
         e.preventDefault();
@@ -173,6 +146,28 @@ $(function() {
         } else {
             $('#logDownloadForm input[type=submit]').addClass("btn-warning");
         }
+    };
+
+    // pulls the serialnum from the URL looks like this : .../deviceDetails.html?serialNum=
+    function getSerialNum() {
+        //Only takes the URL text AFTER "?"
+        var query = window.location.search.substring(1);
+
+        //Checks if there's multiple parameters
+        //If true, then return an emtpy string
+        //(At this moment, we don't need multiple parameters)
+        if (query.includes("&")) {
+            return "";
+        }
+
+        var pair = query.split("=");
+        if (pair[0].toLowerCase() != "serialnum") {
+            return ""; //for error handling, check if serialNum = ""
+        }
+
+        //if function is able to get all the way here,
+        //return the value of serialNum
+        return pair[1];
     };
 
 });
