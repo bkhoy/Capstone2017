@@ -91,3 +91,7 @@ th {
     display: inline-block;
     margin-right: 3em;
 }
+
+.disabled {
+    background-color: lightgray;
+}

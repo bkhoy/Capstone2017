@@ -14,6 +14,19 @@ $(function() {
         logDownload();
     });
 
+    $("#allLogs").change(function() {
+        if ($(this).is(":checked")) {
+            $("#startDate").attr("disabled", true);
+            $("#endDate").attr("disabled", true);
+            $("#startDate").addClass("disabled");
+            $("#endDate").addClass("disabled");
+        } else {
+            $("#startDate").prop("disabled", false);
+            $("#endDate").prop("disabled", false);
+            $("#startDate").removeClass("disabled");
+            $("#endDate").removeClass("disabled");
+        }
+    });
 
     $.ajax({
         url: GET_DEVICE_INFO,
@@ -53,8 +66,15 @@ $(function() {
     function initPastCycles(device) {
         for (var i = 0; i < device.cycles.length; i++) {
             var tr = $("<tr></tr>");
-            //$(tr).append("<td><img src='img/" + device.cycles[i].statusName.toLowerCase() + ".svg'> </td>");
-            $(tr).append("<td><img src='img/active.svg'</td>");
+            var split = device.cycles[i].statusName.toLowerCase().split(":");
+            var statusName = "";
+            if (split.length == 1) {
+                statusName = "active";
+            } else {
+                statusName = split[0];
+            }
+            $(tr).append("<td><img src='img/" + statusName + ".svg'> </td>");
+            //$(tr).append("<td><img src='img/active.svg'</td>");
             $(tr).append("<td>" + device.cycles[i].statusName + "</td>");
             $(tr).append("<td>" + device.cycles[i].startDateTime + "</td>");
             $(tr).append("<td>" + device.cycles[i].runtime + "</td>");
@@ -82,8 +102,6 @@ $(function() {
             chlorine.push(device.cycles[i].totalChlorineProduced);
         }
 
-        console.log(xAxisLabels);
-        console.log(chlorine);
         var data = {
             labels: xAxisLabels,
             datasets: [
