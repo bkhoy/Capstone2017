@@ -13,6 +13,7 @@ var map = null;
 var currDevice = null;
 var myBarChart = null;
 
+// When page is ready, run this block of code
 $(function(){
     // hard coded email for now
     var email = "ssmith@gmail.com";
@@ -43,6 +44,10 @@ function initDeviceList() {
     for (var i = 0; i < DEVICES.length; i++) {
         var div = $("<div></div>");
         div.addClass("device-block");
+        // Highlight the first item for user
+        if (i == 0) {
+            div.addClass("selected");
+        }
         div.prepend("<img src='./img/devices/" + DEVICES[i].photoFileName + "'>");
         // creates a hidden element attached to each div that will allow the map-graph interaction to work.
         // the hidden ul element will be used to uniquely identify each device when it is clicked on
@@ -59,6 +64,9 @@ function initDeviceList() {
                     break;
                 }
             }
+            // Update the highlighted item for the user
+            $(".device-block").removeClass("selected");
+            $(this).addClass("selected");
             updateDescription();
             updateMap();
             removeData();
@@ -143,7 +151,7 @@ function populateMap(data) {
 // initializes the chart. uses Chart.js library.
 function initChart(device) {
     var ctx = document.getElementById("myChart").getContext("2d");
-    ctx.canvas.width = 580;
+    ctx.canvas.width = 520;
     ctx.canvas.height = 400;
 
     var numOfCycles = 10;

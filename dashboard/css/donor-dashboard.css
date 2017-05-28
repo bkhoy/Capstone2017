@@ -257,7 +257,8 @@ nav ul li a:visit, nav ul li a:link{
 
 .device-block {
     max-width: 340px;
-    padding: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
     margin-bottom: 0.5em;
     cursor: pointer;
     display: inline-block;
@@ -326,4 +327,9 @@ span {
 
 canvas {
     margin: auto;
+}
+
+.selected {
+    border-style: solid;
+    border-color: #e8102f;
 }
