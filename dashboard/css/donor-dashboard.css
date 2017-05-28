@@ -5,7 +5,7 @@ body {
 
 #map {
     width: 50%;
-    height: 500px;
+    height: 600px;
     background-color: grey;
     margin-left: auto;
     display: inline-block;
@@ -282,9 +282,8 @@ span {
 }
 
 #graph {
-    width: 100%;
-    height: 100%;
     display: inline-block;
+    max-height: 10px;
 }
 
 #device-description-div {
@@ -312,5 +311,9 @@ span {
 
 #map-graph {
     background-color: white;
-    min-height: 720px;
+    min-height: 820px;
+}
+
+canvas {
+    margin: auto;
 }
