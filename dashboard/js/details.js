@@ -9,6 +9,10 @@ $(function() {
     var serialNum = getSerialNum();
     const GET_DEVICE_INFO = "./webservice/getDeviceInfo.php?serialNum=" + serialNum;
 
+    if (serialNum.trim().length == 0) {
+        window.location.href = "./displayAllDevices.html";
+    }
+
     // hard coded email for now
     var email = "admin@msr.com";
     const GET_ACCOUNT_INFO = "./webservice/getUser.php?email=" + email;
@@ -181,9 +185,9 @@ $(function() {
         // check that all variables are valid before downloading
         if (allLogs || (startDate.trim().length > 0 && endDate.trim().length > 0)) {
             window.open(downloadURL, '_blank');
-            $('#logDownloadForm input[type=submit]').addClass("btn-success");
+            $('#logDownloadForm input[type=submit]').removeClass("btn-warning").addClass("btn-success");
         } else {
-            $('#logDownloadForm input[type=submit]').addClass("btn-warning");
+            $('#logDownloadForm input[type=submit]').removeClass("btn-success").addClass("btn-warning");
         }
     };
 
