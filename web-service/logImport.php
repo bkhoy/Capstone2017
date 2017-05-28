@@ -23,32 +23,35 @@
 	$serialNum = substr($logfile, 8, 5);
 	$producingCl = FALSE;
 	$cycle = null;
+	$numCyclesAdded = 0;
     while (($line = fgetcsv($logdata, 1000, ",")) !== FALSE) {
         if (strcmp(trim($line[0]), "salinity(g/l)") === 0) { // cycle title line
         	// submit previous cycle 
         	if ($cycle !== null) {
-	    		sumbitCycle($cycle, $serialNum);
+	    		$numCyclesAdded += sumbitCycle($cycle, $serialNum);
 	    	}
 	    	// start new cycle
         	$cycle = new cycle(fgetcsv($logdata, 1000, ","));
         } else if (count($line) === 12  && strcmp(trim($line[0]), "time(sec)") !== 0) { // data line
 	    	$entryValues = $line;
-	    	// If cell 4 is reading a value greater than 0 then chlorine has started to be pumped out of the device since the previous entry. 
+	    	// If cell 4 is reading a value greater than 0 then chlorine has started to be pumped out of the device since the previous entry. Only then should chlorine production be calculated.
 	    	$cell4 = $entryValues[10];
 	    	$producingCl = $cell4 != 0;
 	    	$cycle->addEntries($entryValues, $producingCl);	
 	    }
-		//skip the entries title lines and blank lines
+		// skip the entries title lines and blank lines
     }
 
     // submits the last cycle in the file
     if ($cycle !== null) {
-		sumbitCycle($cycle, $serialNum);
+		$numCyclesAdded += sumbitCycle($cycle, $serialNum);
 	} 
     fclose($logdata);
 
+    echo($numCyclesAdded . ' new cycles were successfully added to the database.');
+
 //FUNCTIONS
-	// Takes a Cycle object and inserts its contents into the database
+	// Takes a Cycle object and inserts its contents into the database. Returns 1 if the cycle was successfully added to the database and 0 if it was not added.
 	function sumbitCycle($cycle, $serialNum) {
 		try {
 			//insert the cycle into the database and gets the cycleID from the database
@@ -78,10 +81,12 @@
 				if (count($entryBatch) !== 0) {
 					submitEntries($entryBatch, $cycleID);
 				}
-			}			
+				return 1;
+			}
 		} catch (Exception $e) {
 			errorMessage($e->getMessage());
-		}		
+		}
+		return 0;	
 	}
 
 	// Takes an array of strings, with each string recording a single entry and submits each value in the string seperated by commas into the database with the given cycleID.
