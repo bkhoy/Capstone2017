@@ -48,13 +48,11 @@ CREATE TABLE DEVICE (
 	deviceID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     useModeID int NOT NULL,
     deviceStatusID int NOT NULL,
-    mostRecentCycle int,
     serialNum int NOT NULL UNIQUE,
     deviceDesc varchar(500),
     photoFileName varchar(50),
     FOREIGN KEY(useModeID) REFERENCES USE_MODE(useModeID),
     FOREIGN KEY(deviceStatusID) REFERENCES DEVICE_STATUS (statusID)
-    #FOREIGN KEY(mostRecentCycle) REFERENCES CYCLE(cycleID)
 );
 
 CREATE TABLE LOCATION (
@@ -62,8 +60,8 @@ CREATE TABLE LOCATION (
     deviceID int NOT NULL,
     city varchar(50),
     country varchar(50) NOT NULL,
-    longitude float,
-    latitude float,
+    longitude float NOT NULL,
+    latitude float NOT NULL,
     placementDate date,
     locationDesc varchar(500),
     FOREIGN KEY(deviceID) REFERENCES DEVICE(deviceID)

@@ -9,7 +9,7 @@
 					MAX(startDateTime) AS 'mostRecentCycle' 
 				FROM DEVICE d
 				JOIN LOCATION l ON d.deviceID = l.deviceID
-			    JOIN CYCLE c ON c.deviceID = d.deviceID
+			    LEFT OUTER JOIN CYCLE c ON c.deviceID = d.deviceID
 			    JOIN DEVICE_STATUS ds ON ds.statusID = d.deviceStatusID
 			    GROUP BY d.deviceID;";
 	$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));

@@ -23,7 +23,7 @@
 					JOIN LOCATION l ON l.deviceID = d.deviceID
 					JOIN USE_MODE u ON d.useModeID = u.useModeID
 					JOIN DEVICE_STATUS ds ON d.deviceStatusID = ds.statusID
-					JOIN CYCLE c ON c.deviceID = d.deviceID
+					LEFT OUTER JOIN CYCLE c ON c.deviceID = d.deviceID
 	    			WHERE d.serialNum = :serialNum
 	    			GROUP BY d.deviceID;";
 		$sth = database()->prepare($query);
