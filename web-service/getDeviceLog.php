@@ -23,6 +23,9 @@
 		}
 		$start = $_GET['start'];
 		$end = $_GET['end'];
+		if (strlen($start) == 0 && strlen($end) == 0) {
+			die('Empty start and end parameters');
+		}
 		$results = getDeviceEntriesByDate($serialNum, $start, $end);
 	}
 
@@ -61,7 +64,6 @@
 				fwrite($file, implode($delimiter, $entryTitleValues) . "\n");
 			}
 
-			// update $currentCycleID
 			$currentCycleID = $result['cycleID'];
 		} 
 		if (!is_null($result['entryID'])) {
@@ -80,7 +82,7 @@
 			$line[] = $result['cell4'];
 			$line[] = $result['totalCurrent'];
 
-			//write the entry values to the file
+			// write the entry values to the file
 			fwrite($file, implode($delimiter, $line) . "\n");
 		}
 	}

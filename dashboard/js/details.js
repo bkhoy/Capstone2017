@@ -6,8 +6,14 @@
 // runs this block of code when the page is ready/loaded
 $(function() {
 
+    var serialNum = '15340';
     // hard coded device info for now
-    const GET_DEVICE_INFO = "http://boneappletea.me/webservice/getDeviceInfo.php?serialNum=15340";
+    const GET_DEVICE_INFO = "./webservice/getDeviceInfo.php?serialNum=" + serialNum;
+
+    $('#logDownloadForm').submit( function(e) {
+        e.preventDefault();
+        logDownload();
+    });
 
     $.ajax({
         url: GET_DEVICE_INFO,
@@ -117,5 +123,29 @@ $(function() {
             options: options
         });
     }
+
+    // opens a new window to download the log file
+    function logDownload() {
+        // get form values
+        var allLogs = $('#allLogs').is(":checked");
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        
+        // build URL
+        var downloadURL = './webservice/getDeviceLog.php?serialNum=' + serialNum;
+        downloadURL += '&allLogs=' + allLogs;
+        if (!allLogs) {
+            downloadURL += '&start=' + startDate;
+            downloadURL += '&end=' + endDate;
+        }
+        
+        // check that all variables are valid before downloading
+        if (allLogs || (startDate.trim().length > 0 && endDate.trim().length > 0)) {
+            window.open(downloadURL, '_blank');
+            $('#logDownloadForm input[type=submit]').addClass("btn-success");
+        } else {
+            $('#logDownloadForm input[type=submit]').addClass("btn-warning");
+        }
+    };
 
 });
