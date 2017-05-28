@@ -1,6 +1,7 @@
 body {
     font-family: "Source Sans Pro", "sans-serif";
     background-color: #F1F1F1;
+    min-width: 1200px;
 }
 
 #map {
