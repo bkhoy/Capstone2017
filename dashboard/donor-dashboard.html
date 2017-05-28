@@ -11,84 +11,89 @@
 </head>
 <body>
 
-    <nav>
-        <ul>
-            <li id="logo"> <a href="#"><img src="img/msr-logo-reverse.png"></a></li>
-            <li> <a href="#devices"> DEVICES </a> </li>
-            <li> <a href="#donate"> DONATE </a> </li>
-            <li> <a href="#sponsors"> SPONSORS </a> </li>
-            <li id="account"> <a href=""> ACCOUNT </a> </li>
-        </ul>
-    </nav>
+<nav>
+    <ul>
+        <li id="logo"> <a href="#"><img src="img/msr-logo-reverse.png"></a></li>
+        <li> <a href="#how-section"> PROCESS </a> </li>
+        <li> <a href="#devices"> IMPACT </a> </li>
+        <li> <a href="#donate"> DONATE </a> </li>
+        <li> <a href="#sponsors"> SPONSORS </a> </li>
+        <li id="account"> <a href=""> ACCOUNT </a> </li>
+    </ul>
+</nav>
 
-    <div id="landing-image">
-        <div id="landing-text">
+<div id="landing-image">
+    <div id="landing-text">
         <h1>THANK YOU<br>FOR YOUR<br>DONATION</h1>
         <button type="button" class="btn btn-primary btn-lg"><a href="#devices">SEE YOUR IMPACT</a></button>
-        </div>
-
     </div>
-    <!-- How It Works -->
-    <div id="how-section" class="container">
-        <h1>How It Works</h1>
-        <div class="row">
-            <img id="how-image" src="img/how_symbol.png">
-        </div>
-    </div>
+</div>
 
+<!-- PROCESS -->
+<div id="how-section" class="container box">
+    <h1>How It Works</h1>
+    <hr>
+    <div class="row">
+        <img id="how-image" src="img/how_symbol.png">
+    </div>
+</div>
+
+<!-- IMPACT -->
+<div id="map-graph" class="box">
     <div id="devices" class="banner">
-        <h2>Explore how your devices are changing the world! </h2>
+        <h1>Explore how your devices are changing the world</h1>
     </div>
+    <hr>
+    <div id="scrollable-div"></div>
 
-    <div id="map-graph">
-        <div id="scrollable-div">
+    <div id="description-graph">
+        <div id="device-description-div">
+            <p id="description"></p>
         </div>
-        <div id="description-graph">
-            <div id="device-description-div">
-                <p id="description"></p>
-            </div>
-            <div id="graph">
-                <canvas id="myChart"></canvas>
-            </div>
-        </div>
-        <div id="map"></div>
-    </div>
-
-    <div id="donate" class="container">
-        <div id="donate-text">
-            <p>You can make them smile<br>
-               Send them a gift.
-                </p>
-            <button type="button" class="btn btn-primary btn-lg"><a href="https://donate.worldvision.org/ways-to-give" target="_blank" >GIFT THEM NOW</a></button>
+        <div id="graph">
+            <canvas id="myChart"></canvas>
         </div>
     </div>
+    <div id="map"></div>
+</div>
 
-    <div id="sponsors" class="container">
-        <h2>Sponsored by</h2>
-            <div class="col-md-3">
-                <a href="http://www.msrglobalhealth.com/"><img src="img/msr-logo.png"></a>
-            </div>
-            <div class="col-md-3">
-                <a href="https://www.path.org/"><img src="img/path-logo.png"></a>
-            </div>
-            <div class="col-md-3">
-                <a href="https://ischool.uw.edu/"> <img src="img/ischool-logo.png"></a>
-            </div>
-            <div class="col-md-3">
-                <a href="https://www.worldvision.org/"><img src="img/wv-logo.png"></a>
-            </div>
+<!-- DONATE -->
+<div id="donate" class="container">
+    <div id="donate-text">
+        <p>You can make them smile<br>
+            Send them a gift
+        </p>
+        <button type="button" class="btn btn-primary btn-lg"><a href="https://donate.worldvision.org/ways-to-give" target="_blank" >GIFT THEM NOW</a></button>
     </div>
+</div>
 
-    <!-- load libraries -->
-    <script src="js/Chart.min.js"></script>
-    <script src="lib/jquery-3.2.0.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/donor-dashboard.js" type="text/javascript"></script>
+<!-- SPONSOR -->
+<div id="sponsors" class="container">
+    <h2>Sponsored by</h2>
+    <div class="col-md-3">
+        <a href="http://www.msrglobalhealth.com/"><img src="img/msr-logo.png"></a>
+    </div>
+    <div class="col-md-3">
+        <a href="https://www.path.org/"><img src="img/path-logo.png"></a>
+    </div>
+    <div class="col-md-3">
+        <a href="https://ischool.uw.edu/"> <img src="img/ischool-logo.png"></a>
+    </div>
+    <div class="col-md-3">
+        <a href="https://www.worldvision.org/"><img src="img/wv-logo.png"></a>
+    </div>
+</div>
 
-    <!-- change API key if needed. current API key is from boneappleteauw@gmail.com -->
-    <script async
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx2hhNKoonV8JvqKc2knbmRtaWy5st9zE&callback=initMap">
-    </script>
+<!-- load libraries -->
+<script src="js/Chart.min.js"></script>
+<script src="lib/jquery-3.2.0.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/donor-dashboard.js" type="text/javascript"></script>
+
+<!-- change API key if needed. current API key is from boneappleteauw@gmail.com -->
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx2hhNKoonV8JvqKc2knbmRtaWy5st9zE&callback=initMap">
+</script>
 
 </body>
 </html>

@@ -151,6 +151,7 @@ nav ul li a:visit, nav ul li a:link{
     background-color: white;
     margin-top: 2em;
     width: 100%;
+    padding: 1em;
 }
 
 #how-section {
