@@ -3,6 +3,9 @@
 $(function() {
     const GET_ALL_DEVICES = "./webservice/getAllDevices.php";
     const GET_DEVICE_DETAILS = "./deviceDetails.html?serialNum=";
+    // hard coded email for now
+    var email = "admin@msr.com";
+    const GET_ACCOUNT_INFO = "./webservice/getUser.php?email=" + email;
 
     //displays list of all devices
     function getAllDevices() {
