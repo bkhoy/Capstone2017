@@ -14,99 +14,14 @@
 
     </head>
     <body>
-        <!-- left navbar -->
-        <div id="leftNav" class="navbar navbar-inverse navbar-fixed-left">
-            <div id="login">
-                <h2>Join us!</h2>
-                <!-- will need to edit the action="web-service.php" -->
-                <form id="loginForm" action="./donor-dashboard.html" method="POST">
-                    <label>Email</label>
-                    <input type="text" id="email" class="form-control loginElement">
-                    <label>Password</label>
-                    <input type="text" id="password" class="form-control loginElement">
-                    <button type="submit" id="loginButton" class="btn btn-success loginElement">Sign in</button>
+        <div id="landing">
+            <div id="box">
+                <h1>Let's explore the dashboard for </h1>
+                <button id="donor_btn" type="button" class="btn btn-primary btn-lg"><a href="donor-dashboard.html"><img src="img/donor_icon.png">DONOR</a></button>
 
-                    <!--
-                    <button type="button" id="signupButton" class="btn btn-primary loginElement">Sign up</button>
-                    -->
-                </form>
+                <button id="admin_btn" type="button" class="btn btn-primary btn-lg"><a href="displayAllDEvices.html"><img src="img/admin_icon.png">ADMIN</a></button>
             </div>
-
-            <!-- IN CASE WE WANT NAV BAR FUNCTIONS -->
-            <!--<ul class="nav navbar-nav">-->
-                <!--<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>-->
-                    <!--<ul class="dropdown-menu" role="menu">-->
-                        <!--<li><a href="#">Sub Menu1</a></li>-->
-                        <!--<li><a href="#">Sub Menu2</a></li>-->
-                        <!--<li><a href="#">Sub Menu3</a></li>-->
-                        <!--<li class="divider"></li>-->
-                        <!--<li><a href="#">Sub Menu4</a></li>-->
-                        <!--<li><a href="#">Sub Menu5</a></li>-->
-                    <!--</ul>-->
-                <!--</li>-->
-                <!--<li><a href="#">Link2</a></li>-->
-                <!--<li><a href="#">Link3</a></li>-->
-                <!--<li><a href="#">Link4</a></li>-->
-                <!--<li><a href="#">Link5</a></li>-->
-            <!--</ul>-->
-        </div>
-        <div>
-            <!--<div class="row">-->
-                <!--<h1>Welcome! Thanks for your help and support!</h1>-->
-            <!--</div>-->
-
-            <!-- carousel -->
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#myCarousel" data-slide-to="1"></li>
-                    <li data-target="#myCarousel" data-slide-to="2"></li>
-                    <li data-target="#myCarousel" data-slide-to="3"></li>
-                </ol>
-
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner" role="listbox">
-                    <div class="item active" id="image1">
-                        <img class="slideImage" src="img/water1.jpg" alt="Chania">
-                        <div class="carousel-content">
-                            <p>Water water water water water</p>
-                        </div>
-                    </div>
-
-                    <div class="item" id="image2">
-                        <img class="slideImage" src="img/water2.jpg" alt="Chania">
-                        <div class="carousel-content">
-                            <p>Motivations for Donations</p>
-                        </div>
-                    </div>
-
-                    <div class="item" id="image3">
-                        <img class="slideImage" src="img/water3.jpg" alt="Flower">
-                        <div class="carousel-content">
-                            <p>Clean drinking water is the way to go</p>
-                        </div>
-                    </div>
-
-                    <div class="item" id="image4">
-                        <img class="slideImage" src="img/water4.jpg" alt="Flower">
-                        <div class="carousel-content">
-                            <p>Bone Apple Tea!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Left and right controls -->
-                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
-        </div>
+        </div>    
 
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <!-- load libraries -->
