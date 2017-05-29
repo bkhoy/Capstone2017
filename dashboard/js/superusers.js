@@ -81,5 +81,21 @@ $(function() {
         $("#devices").DataTable();
     }
 
+    // populate the Account modal
+    $.ajax({
+        url: GET_ACCOUNT_INFO,
+        dataType: "json",
+        method: "GET",
+        success: function(account) {
+            var p = $("<p></p>");
+            var text = "Name: " + account.fname + " " + account.lname + "<br>" + "Email: " + account.email;
+            p.html(text);
+            $(".modal-body").html(p);
+        },
+        error: function(error) {
+            $(".modal-body").html("<p>Sorry, your account information could not be retrieved right now.</p>");
+        }
+    });
+
     getAllDevices();
 });
