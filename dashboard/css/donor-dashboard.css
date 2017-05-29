@@ -186,8 +186,7 @@ nav ul li a:visit, nav ul li a:link{
     background-image: url("../img/children-donate.jpg");
     background-size: cover; 
     background-repeat: no-repeat;;
-    background-position: top left;
-    background-attachment: fixed;
+    background-position: center left;
     margin-top: 3em;
     margin-bottom: 3em;
     min-height: 500px;
