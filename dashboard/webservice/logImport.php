@@ -1,56 +1,123 @@
 <?php
-// is there a way to set this based on how many lines are in the given file?
+	// is there a way to set this based on how many lines are in the given file?
 	ini_set('max_execution_time', 50000);
 
 	// Imports global functions
 	require('functions.php');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log Import</title>
 
-	// Get the name of the log file
-	if(!isset($_GET['logfile'])) {
-		die('Must pass a file name');
-	}
-	$logfile = $_GET['logfile'];
-	// Check that the file exists and that the filename is correctly formated, then open it
-	if(!preg_match('/(logfile|logdata)_\d{5}.(txt|csv)/i', $logfile)) {
-		die("Given filename is incorrectly formatted. <br/> Should follow the structure: 'logfile_00000.txt' or 'logfile_00000.csv' with the 0s representing a device's serial number.");
-	}
-	if(!file_exists($logfile)) {
-		die('The log file ' . $logfile . ' could not be found on the server.');
-	}
-	$logdata = fopen($logfile, "r");
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/details.css"/>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="left_links">
+                <a href="../addDeviceLog.html">
+                    <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </a>
+            </li>
+            <li class="right_links"> <a href="#" data-toggle="modal" data-target="#myModal">Account</a></li>
+        </ul>
+    </nav>
 
-	// Parse the log file into the cycles, calculate the chlorine produced, and submit each cycle to the database
-	$serialNum = substr($logfile, 8, 5);
-	$producingCl = FALSE;
-	$cycle = null;
-	$numCyclesAdded = 0;
-    while (($line = fgetcsv($logdata, 1000, ",")) !== FALSE) {
-        if (strcmp(trim($line[0]), "salinity(g/l)") === 0) { // cycle title line
-        	// submit previous cycle 
-        	if ($cycle !== null) {
-	    		$numCyclesAdded += sumbitCycle($cycle, $serialNum);
-	    	}
-	    	// start new cycle
-        	$cycle = new cycle(fgetcsv($logdata, 1000, ","));
-        } else if (count($line) === 12  && strcmp(trim($line[0]), "time(sec)") !== 0) { // data line
-	    	$entryValues = $line;
-	    	// If cell 4 is reading a value greater than 0 then chlorine has started to be pumped out of the device since the previous entry. Only then should chlorine production be calculated.
-	    	$cell4 = $entryValues[10];
-	    	$producingCl = $cell4 != 0;
-	    	$cycle->addEntries($entryValues, $producingCl);	
-	    }
-		// skip the entries title lines and blank lines
-    }
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
 
-    // submits the last cycle in the file
-    if ($cycle !== null) {
-		$numCyclesAdded += sumbitCycle($cycle, $serialNum);
-	} 
-    fclose($logdata);
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">My Account</h2>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
 
-    echo($numCyclesAdded . ' new cycles were successfully added to the database.');
+        </div>
+    </div>
 
+    <div id="main" class="container">
+    	<div class="box row">
+    		<p>Your log file is being processed, this process can take some time. <strong>Do not close your browser while the log is being imported.</strong> Updates will be displayed below:</p>
+	    	<?php echo(importLogFile()); ?>
+		</div>
+	</div>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- load libraries -->
+    <script src="../lib/jquery-3.2.0.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<?php
 //FUNCTIONS
+	// Imports the uploaded log file. Returns a string with completion or error messages.
+	function importLogFile() {
+		// check that a logFile and a serialNum were passed
+		if (!isset($_FILES['logFile'])) {
+			return 'Must pass a logFile for import.';
+		}
+		if (!isset($_POST['serialNum'])) {
+			return 'Must pass a device serialNum.';
+		}
+		
+		// set the serialNum
+		$serialNum = trim($_POST['serialNum']);
+		
+		// open the uploaded file from the temporary directory
+		$logFilePath = $_FILES["logFile"]["tmp_name"];
+		$logdata = fopen($logFilePath, "r");
+
+		// Parse the log file into the cycles, calculate the chlorine produced, and submit each cycle to the database		
+		$producingCl = FALSE;
+		$cycle = null;
+		$numCyclesAdded = 0;
+	    while (($line = fgetcsv($logdata, 1000, ",")) !== FALSE) {
+	        if (strcmp(trim($line[0]), "salinity(g/l)") === 0) { // cycle title line
+	        	// submit previous cycle 
+	        	if ($cycle !== null) {
+		    		$numCyclesAdded += sumbitCycle($cycle, $serialNum);
+		    	}
+		    	// start new cycle
+	        	$cycle = new cycle(fgetcsv($logdata, 1000, ","));
+	        } else if (count($line) === 12  && strcmp(trim($line[0]), "time(sec)") !== 0) { // data line
+		    	$entryValues = $line;
+		    	// If cell 4 is reading a value greater than 0 then chlorine has started to be pumped out of the device since the previous entry. Only then should chlorine production be calculated.
+		    	$cell4 = $entryValues[10];
+		    	$producingCl = $cell4 != 0;
+		    	$cycle->addEntries($entryValues, $producingCl);	
+		    }
+			// skip the entries title lines and blank lines
+	    }
+
+	    // submits the last cycle in the file
+	    if ($cycle !== null) {
+			$numCyclesAdded += sumbitCycle($cycle, $serialNum);
+		} 
+	    fclose($logdata);
+
+	    return $numCyclesAdded . ' new cycles were successfully added to the database.';
+	}
+	
 	// Takes a Cycle object and inserts its contents into the database. Returns 1 if the cycle was successfully added to the database and 0 if it was not added.
 	function sumbitCycle($cycle, $serialNum) {
 		try {

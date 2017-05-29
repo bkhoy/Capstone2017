@@ -28,5 +28,4 @@ $(function() {
 			$("#deviceResult").empty().append(data);
 		});
 	});
-
 });
