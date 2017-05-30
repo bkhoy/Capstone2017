@@ -45,9 +45,25 @@ $(function() {
             var iconLink = "<img src='img/" + data[i].status.toLowerCase() + ".svg'>";
             $(tr).append("<td>" + iconLink + "</td>");
             tr.append($('<td><a href="' + link + '" >' + data[i].serialNum + '</a></td>'));
-            tr.append($('<td>' + data[i].mostRecentCycle + '</td>'));
-            tr.append($('<td>' + data[i].placementDate + '</td>'));
-            tr.append($('<td>' + data[i].city + '</td>'));
+            
+            if (!data[i].mostRecentCycle) {
+                tr.append($('<td>-</td>'));
+            } else {
+                tr.append($('<td>' + data[i].mostRecentCycle + '</td>'));
+            }
+
+            if (!data[i].placementDate) {
+                tr.append($('<td>-</td>'));
+            } else {
+                tr.append($('<td>' + data[i].placementDate + '</td>'));
+            }
+
+            if (!data[i].city) {
+                tr.append($('<td>-</td>'));
+            } else {
+                tr.append($('<td>' + data[i].city + '</td>'));
+            }
+
             tr.append($('<td>' + data[i].country + '</td>'));
             $("#cycles-tbody").append(tr);
 
