@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+@import url('common.css');
 
 body {
     font-family: "Source Sans Pro", "sans-serif";
@@ -322,6 +323,7 @@ span {
 }
 
 #map-graph {
+    visibility: hidden;
     background-color: white;
     min-height: 820px;
 }

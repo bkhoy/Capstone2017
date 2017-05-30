@@ -23,6 +23,9 @@ $(function() {
                 // var data = [{"serialNum":"15348","status":"Active","city":"Nairobi","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15345","status":"Active","city":"Mombasa","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15344","status":"Active","city":"Wote","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15342","status":"Active","city":"Dadaab","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15347","status":"Active","city":"Port-au-Prince","country":"Haiti","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15340","status":"Active","city":"Cercadie","country":"Haiti","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"}];
                 // populatePage(data);
             }
+        }).done(function() {
+            $(".statuses").css("visibility", "visible");
+            $(".loadingDiv").toggle();
         });
     }
 
@@ -81,7 +84,13 @@ $(function() {
         $("#total").append(total);
 
         // initialize DataTables jQuery library
-        $("#devices").DataTable();
+        $("#devices").DataTable({
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+            "oLanguage": {
+                "sLengthMenu": "Show _MENU_ devices",
+                "sInfo": "Showing _START_ to _END_ of _TOTAL_ devices"
+            }
+        });
     }
 
     // populate the Account modal

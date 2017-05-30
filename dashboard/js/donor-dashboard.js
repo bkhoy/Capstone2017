@@ -120,6 +120,9 @@ function initMap() {
             // initChart(DEVICES[0]);
             // updateDescription();
         }
+    }).done(function() {
+        $("#map-graph").css("visibility", "visible");
+        $(".loadingDiv").toggle();
     });
 }
 

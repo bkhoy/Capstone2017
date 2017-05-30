@@ -71,6 +71,8 @@ $(function() {
             // initDeviceSummary(device);
             // initPastCycles(device);
         }
+    }).done(function() {
+        $(".loadingDiv").toggle();
     });
 
     // Initialize the device summary row
@@ -108,7 +110,13 @@ $(function() {
         }
 
         // initialize DataTables jQuery library
-        $("#cycles").DataTable();
+        $("#cycles").DataTable({
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+            "oLanguage": {
+                "sLengthMenu": "Show _MENU_ cycles",
+                "sInfo": "Showing _START_ to _END_ of _TOTAL_ cycles"
+            }
+        });
      }
 
     // initializes the chart. uses Chart.js library.
