@@ -58,8 +58,8 @@ $(function() {
         dataType: "json",
         method: "GET",
         success: function(device) {
-            initChart(device);
             initDeviceSummary(device);
+            initChart(device);            
             initPastCycles(device);
         },
         error: function(error) {
@@ -84,9 +84,8 @@ $(function() {
             $("#last-used").html(device.cycles[0].startDateTime);
             $("#cycle-status").html(device.cycles[0].statusDesc);
         } else {
-            $("#last-used").html("No cycles for given device.");
-            $("#cycle-status").html("No cycles for given device.");
-
+            $("#last-used").html("No cycles for this device.");
+            $("#cycle-status").html("No cycles for this device.");
         }
     }
 
@@ -121,6 +120,11 @@ $(function() {
 
     // initializes the chart. uses Chart.js library.
     function initChart(device) {
+        if (device.cycles.length == 0) {
+            $("#graph").html("No cycles for this device.");
+            return;
+        }
+
         var ctx = document.getElementById("myChart").getContext("2d");
         ctx.canvas.width = 800;
         ctx.canvas.height = 600;

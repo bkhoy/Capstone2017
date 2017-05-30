@@ -36,6 +36,7 @@ $(function() {
         var errorCount = 0;
         var activeCount = 0;
         var inactiveCount = 0;
+        var unknownCount = 0;
 
         for (var i = 0; i < data.length; i++) {
             var link = GET_DEVICE_DETAILS + data[i].serialNum;
@@ -58,6 +59,8 @@ $(function() {
                 inactiveCount++;
             } else if (data[i].status.startsWith("Warning")) {
                 warningCount++;
+            } else if (data[i].status.startsWith("Unknown")) {
+                unknownCount++;
             }
         }
 
@@ -82,6 +85,10 @@ $(function() {
         var total = $("<h1></h1>");
         total.html(data.length);
         $("#total").append(total);
+
+        var unknown = $("<h1></h1>");
+        unknown.html(unknownCount);
+        $("#unknown").append(unknown);
 
         // initialize DataTables jQuery library
         $("#devices").DataTable({
