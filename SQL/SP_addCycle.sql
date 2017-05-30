@@ -2,12 +2,15 @@ CREATE DEFINER=`appleTea`@`%` PROCEDURE `addCycle`(serialNum int, newDateTime DA
 	newCell3 float, newCell4 float, newTotalCurrent float, newChlorineProduced float, cycleStatus varchar(50), OUT cycleID INTEGER)
 BEGIN
 	# Adds a Cycle with the given values to the database and updates deviceStatus
-	# Returns the cycleID of that cycle or -1 if cycle was not added to the database
+	# Returns the cycleID of that cycle, -1 if cycle was not added to the database, or -2 if the serialNum passed is not valid
 	
     DECLARE numCycleMatches int;
     DECLARE cycleDeviceID int;
     SET cycleDeviceID = (SELECT d.deviceID FROM DEVICE d WHERE d.serialNum = serialNum);
-	SET numCycleMatches = (SELECT COUNT(c.cycleID) FROM CYCLE c WHERE c.deviceID = cycleDeviceID AND newDateTime = c.startDateTime);
+    IF cycleDeviceID IS NULL THEN
+    	SET numCycleMatches = (SELECT COUNT(c.cycleID) FROM CYCLE c WHERE c.deviceID = cycleDeviceID AND newDateTime = c.startDateTime);
+	ELSE SELECT -2;
+    END IF;
     
     #Insert into database if the cycle does not already exist
      CASE 

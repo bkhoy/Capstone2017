@@ -128,7 +128,7 @@
 			$cycleID = $sth->fetch()[0];
 			
 			//if $cycleID = -1 then cycle already exists in the database
-			if($cycleID != -1) {
+			if($cycleID > -1) {
 				// insert the cycle's entries into the database in batches of 1000
 				$entryBatch = array();
 				foreach ($cycle->entries as $entry) {
@@ -147,7 +147,6 @@
 		} catch (Exception $e) {
 			//errorMessage($e->getMessage());
 			echo("Importing this log encountered an error. Please check that a device with the serial number " . $serialNum . " exists and that your log file is properly formatted. <br />");
-			exit;
 		}
 		return 0;	
 	}
@@ -177,7 +176,6 @@
 		} catch (Exception $e) {
 			//errorMessage($e->getMessage());
 			echo("Importing this log encountered an error. Please check that your log file is properly formatted. <br />");
-			exit;
 		}
 	}
 	
