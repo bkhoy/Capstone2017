@@ -23,6 +23,9 @@ $(function() {
                 // var data = [{"serialNum":"15348","status":"Active","city":"Nairobi","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15345","status":"Active","city":"Mombasa","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15344","status":"Active","city":"Wote","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15342","status":"Active","city":"Dadaab","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15347","status":"Active","city":"Port-au-Prince","country":"Haiti","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15340","status":"Active","city":"Cercadie","country":"Haiti","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"}];
                 // populatePage(data);
             }
+        }).done(function() {
+            $(".statuses").css("visibility", "visible");
+            $(".loadingDiv").toggle();
         });
     }
 
@@ -33,6 +36,7 @@ $(function() {
         var errorCount = 0;
         var activeCount = 0;
         var inactiveCount = 0;
+        var unknownCount = 0;
 
         for (var i = 0; i < data.length; i++) {
             var link = GET_DEVICE_DETAILS + data[i].serialNum;
@@ -41,9 +45,25 @@ $(function() {
             var iconLink = "<img src='img/" + data[i].status.toLowerCase() + ".svg'>";
             $(tr).append("<td>" + iconLink + "</td>");
             tr.append($('<td><a href="' + link + '" >' + data[i].serialNum + '</a></td>'));
-            tr.append($('<td>' + data[i].mostRecentCycle + '</td>'));
-            tr.append($('<td>' + data[i].placementDate + '</td>'));
-            tr.append($('<td>' + data[i].city + '</td>'));
+            
+            if (!data[i].mostRecentCycle) {
+                tr.append($('<td>-</td>'));
+            } else {
+                tr.append($('<td>' + data[i].mostRecentCycle + '</td>'));
+            }
+
+            if (!data[i].placementDate) {
+                tr.append($('<td>-</td>'));
+            } else {
+                tr.append($('<td>' + data[i].placementDate + '</td>'));
+            }
+
+            if (!data[i].city) {
+                tr.append($('<td>-</td>'));
+            } else {
+                tr.append($('<td>' + data[i].city + '</td>'));
+            }
+
             tr.append($('<td>' + data[i].country + '</td>'));
             $("#cycles-tbody").append(tr);
 
@@ -55,6 +75,8 @@ $(function() {
                 inactiveCount++;
             } else if (data[i].status.startsWith("Warning")) {
                 warningCount++;
+            } else if (data[i].status.startsWith("Unknown")) {
+                unknownCount++;
             }
         }
 
@@ -80,8 +102,18 @@ $(function() {
         total.html(data.length);
         $("#total").append(total);
 
+        var unknown = $("<h1></h1>");
+        unknown.html(unknownCount);
+        $("#unknown").append(unknown);
+
         // initialize DataTables jQuery library
-        $("#devices").DataTable();
+        $("#devices").DataTable({
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+            "oLanguage": {
+                "sLengthMenu": "Show _MENU_ devices",
+                "sInfo": "Showing _START_ to _END_ of _TOTAL_ devices"
+            }
+        });
     }
 
     // populate the Account modal

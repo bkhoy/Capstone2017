@@ -10,7 +10,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/superusers.css"/>
+    <link rel="stylesheet" href="css/displayAllDevices.css"/>
     <link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
 </head>
 <body>
@@ -19,6 +19,7 @@
             <li class="left_links"> <a href="#"><img id="logo" src="img/msr-logo-reverse.png"></a></li>
             <!-- <li class="left_links"> <input class="form-control" id="search" type="text" placeholder="Search..."> </li> -->
             <li class="right_links"><a href="#" data-toggle="modal" data-target="#myModal">Account</a></li>
+            <li class="right_links"><a href="addDeviceLog.html">Add Device/Log</a></li>
         </ul>
     </nav>
 
@@ -44,6 +45,9 @@
 
     <div id="main" class="container">
         <div id="statuses" class="row box">
+            <div class="loadingDiv">
+                <img class="loading" src="img/loading.gif">
+            </div>
             <div class="statuses" ><img src="img/all_devices.svg"><h4>Total</h4> </div>
             <div id="total" class="statuses status-border"></div>
 
@@ -51,7 +55,10 @@
             <div id="active" class="statuses"></div>
 
             <div class="statuses"><img src="img/inactive.svg"><h4>Inactive</h4></div>
-            <div id="inactive" class="statuses status-border"></div>
+            <div id="inactive" class="statuses"></div>
+
+            <div class="statuses"><img src="img/unknown.svg"><h4>Unknown</h4></div>
+            <div id="unknown" class="statuses status-border"></div>
 
             <div class="statuses"><img src="img/warning.svg"><h4>Warning</h4></div>
             <div id="warning" class="statuses"></div>
@@ -78,6 +85,9 @@
                     </tbody>
                 </table>
             </div>
+            <div class="loadingDiv">
+                <img class="loading" src="img/loading.gif">
+            </div>
         </div>
 
     </div>
@@ -91,6 +101,6 @@
     <script src="lib/jquery-3.2.0.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/datatables.min.js"></script>
-    <script src="js/superusers.js" type="text/javascript"></script>
+    <script src="js/displayAllDevices.js" type="text/javascript"></script>
 </body>
 </html>

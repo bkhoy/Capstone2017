@@ -1,34 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+@import url('common.css');
 
 body {
     margin: 0;
     padding: 0;
     font-family: "Source Sans Pro", "sans-serif";
     background-color: #F4F4F4;
-    min-width: 800px;
+    min-width: 1000px;
 }
-
-/*nav {
-    top: 0;
-    width: 100%;
-    background-color: lightgray;
-    position: absolute;
-    font-size: 16px;
-    z-index: 1;
-}
-
-li a {
-    color: black;
-}
-
-nav ul {
-    padding: 0;
-}
-
-nav ul li {
-    display: inline-block;
-    margin: 0.5em 1.5em;
-}*/
 
 nav {
     top: 0;
@@ -117,6 +96,7 @@ th {
 }
 
 .statuses {
+    visibility: hidden;
     float: left;
     display: inline-block;
     margin: 1em;
@@ -125,6 +105,7 @@ th {
 
 .statuses img {
     max-height: 3em;
+    height: 2.6em;
 }
 
 .status-border {

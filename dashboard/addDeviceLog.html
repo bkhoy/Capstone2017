@@ -24,6 +24,7 @@
                 </a>
             </li>
             <li class="right_links"> <a href="#" data-toggle="modal" data-target="#myModal">Account</a></li>
+            <li class="right_links"><a href="addDeviceLog.html">Add Device/Log</a></li>
         </ul>
     </nav>
 
@@ -100,16 +101,11 @@
         <div class="box row">
         	<p>All logs must have a device associated with them in the database before importing. Use the form above to create a new device in the database if a device does not already exist for this log.</p>
 
+        	<p id="submitWarning" style="display: none;">Your log file is being processed, this can take some time. <strong>Do not close your browser while the log is being imported.</strong> You will be redirected when the upload is complete.</p>
+
             <form id="importLog" action=".\webservice\logImport.php" method="post" enctype="multipart/form-data">
 				<div>
 					<strong>Serial Number:</strong>
-					<!-- Would like to populate with a list from the DB, but number field until that works.
-					<select name="serialNum">
-						<option value="15340">15340</option>
-						<option value="15342">15342</option>
-						<option value="16000">16000</option>
-					</select>
-					-->
                     <input type="number" name="serialNum" min="0" required>
 				</div>
 

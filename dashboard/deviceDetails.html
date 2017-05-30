@@ -25,6 +25,7 @@
                 </a>
             </li>
             <li class="right_links"> <a href="#" data-toggle="modal" data-target="#myModal">Account</a></li>
+            <li class="right_links"><a href="addDeviceLog.html">Add Device/Log</a></li>
         </ul>
     </nav>
 
@@ -70,11 +71,17 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="loadingDiv">
+                <img class="loading" src="img/loading.gif">
+            </div>
 
         </div>
 
         <h3>Recent Cycle Status</h3>
         <div class="recent-status box row">
+            <div class="loadingDiv">
+                <img class="loading" src="img/loading.gif">
+            </div>
             <h3 id="cycle-status">
             </h3>
         </div>
@@ -94,12 +101,19 @@
                 <tbody id="cycles-tbody">
                 </tbody>
             </table>
+            <div class="loadingDiv">
+                <img class="loading" src="img/loading.gif">
+            </div>
         </div>
 
 
         <h3>Chlorine Production per Cycle</h3>
         <!-- Graph -->
+
         <div id="chart-container" class="box row">
+            <div class="loadingDiv">
+                <img class="loading" src="img/loading.gif">
+            </div>
             <div id="graph">
                 <canvas id="myChart"></canvas>
             </div>

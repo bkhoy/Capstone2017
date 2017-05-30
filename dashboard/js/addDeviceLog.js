@@ -49,4 +49,9 @@ $(function() {
         }
     });
 
+    // display warning for import log file
+    $("#importLog").submit(function(event) {
+    	$("#submitWarning").removeAttr("style");
+    });
+
 });
