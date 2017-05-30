@@ -56,15 +56,9 @@
 
     <div id="main" class="container">
     	<div class="box row">
-    		<p>Your log file is being processed, this process can take some time. <strong>Do not close your browser while the log is being imported.</strong> Updates will be displayed below:</p>
 	    	<?php echo(importLogFile()); ?>
 		</div>
 	</div>
-
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <!-- load libraries -->
-    <script src="../lib/jquery-3.2.0.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
 </body>
 </html>
 
@@ -151,7 +145,9 @@
 				return 1;
 			}
 		} catch (Exception $e) {
-			errorMessage($e->getMessage());
+			//errorMessage($e->getMessage());
+			echo("Importing this log encountered an error. Please check that a device with the serial number " . $serialNum . " exists and that your log file is properly formatted. <br />");
+			exit;
 		}
 		return 0;	
 	}
@@ -179,7 +175,9 @@
 			$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 			$sth->execute($queryValues);
 		} catch (Exception $e) {
-			errorMessage($e->getMessage());
+			//errorMessage($e->getMessage());
+			echo("Importing this log encountered an error. Please check that your log file is properly formatted. <br />");
+			exit;
 		}
 	}
 	

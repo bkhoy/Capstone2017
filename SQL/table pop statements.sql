@@ -79,11 +79,11 @@ INSERT INTO USER (accountTypeID, fName, lName, email) VALUES
 	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Ferris', 'Dunlap', 'ac@Aliquam.com');
     
 INSERT INTO USER_DEVICE (userID, deviceID) VALUES
-	((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
     ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '16302')),
-    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15342')),
-    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15345')),
     ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15347')),
+    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15340')),
+    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
+    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15342')),
 	((SELECT userID FROM USER WHERE email = 'ac@Aliquam.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
     ((SELECT userID FROM USER WHERE email = 'praesent.eu@orcipibus.org' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
     ((SELECT userID FROM USER WHERE email = 'lorem.luctus@ligulaelitpretium.org' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
