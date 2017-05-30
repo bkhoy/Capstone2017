@@ -25,7 +25,7 @@
 
 	// call the addDevice storedProcedure
 	try {
-		$query = "CALL addDevice(:serialNum, :photoFileName, :city, :country, :longitude, :latitude, :placementDate, @output); SELECT @ouptut;";
+		$query = "CALL addDevice(:serialNum, :photoFileName, :city, :country, :latitude, :longitude, :placementDate, @output); SELECT @ouptut;";
 		$sth = database()->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 		$sth->execute(array(':serialNum' => $serialNum, ':photoFileName' => $photoFileName,
 							':city' => $city, ':country' => $country,

@@ -21,7 +21,7 @@ INSERT INTO DEVICE_STATUS (statusName, statusDesc) VALUES
     ('Error', 'This device\'s most recent cycle ended with in an error.');
 
 INSERT INTO CYCLE_STATUS (statusName, isError, statusDesc) VALUES
-	('Warning: Hot Output Temperature', FALSE, 'The output temperature is between 50C and could cause a burn. Device will shut off if output reaches 60C.'),
+	('Warning: Hot Output Temperature', FALSE, 'The output temperature is above 50C! Device will shut off if output exceeds 60C.'),
     ('Warning: Low Battery', FALSE, 'Power input is low please charge battery or check power supply. Device will shut down if voltage drops too low.'),
     ('Error: High Input Temperature', TRUE, 'The input brine solution is too hot to use! A cooler brine solution is needed.'),
     ('Error: Low Input Temperature', TRUE, 'The input brine solution is too cold to use! A warmer brine solution is needed.'),
@@ -36,8 +36,7 @@ INSERT INTO DEVICE (useModeID, deviceStatusID, serialNum, photoFileName) VALUES
 	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15344', 'device3.jpg'),
 	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15342', 'device4.jpg'),
 	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15347', 'device5.jpg'),
-	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15340', 'device2.jpg'),
-    ((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '16000', 'device3.jpg');
+	((SELECT useModeID FROM USE_MODE WHERE useModeName = 'IPC'), (SELECT statusID FROM DEVICE_STATUS WHERE statusName = 'Unknown'), '15340', 'device2.jpg');
     
 INSERT INTO LOCATION (deviceID, placementDate, city, country, latitude, longitude) VALUES
 	((SELECT deviceID FROM DEVICE WHERE serialNum = 15348), '2017-04-03', 'Nairobi', 'Kenya', -1.2920659, 36.8219462),
@@ -80,6 +79,11 @@ INSERT INTO USER (accountTypeID, fName, lName, email) VALUES
 	((SELECT accountTypeID FROM ACCOUNT_TYPE WHERE accountType = 'donor'), 'Ferris', 'Dunlap', 'ac@Aliquam.com');
     
 INSERT INTO USER_DEVICE (userID, deviceID) VALUES
+	((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
+    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '16302')),
+    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15342')),
+    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15345')),
+    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15347')),
 	((SELECT userID FROM USER WHERE email = 'ac@Aliquam.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
     ((SELECT userID FROM USER WHERE email = 'praesent.eu@orcipibus.org' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
     ((SELECT userID FROM USER WHERE email = 'lorem.luctus@ligulaelitpretium.org' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
@@ -109,7 +113,4 @@ INSERT INTO USER_DEVICE (userID, deviceID) VALUES
     ((SELECT userID FROM USER WHERE email = 'amet.ante@dolor.org' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15340')),
     ((SELECT userID FROM USER WHERE email = 'tempus.lacinia@mattisInteger.ca' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15340')),
     ((SELECT userID FROM USER WHERE email = 'erat@commodo.co.uk' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15340')),
-    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15348')),
-    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15340')),
-    ((SELECT userID FROM USER WHERE email = 'ssmith@gmail.com' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15342')),
     ((SELECT userID FROM USER WHERE email = 'erat@commodo.co.uk' LIMIT 1), (SELECT deviceID FROM DEVICE WHERE serialNum = '15347'));

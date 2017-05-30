@@ -1,4 +1,5 @@
 <?php
+	ini_set('max_execution_time', 50000);
 
 	// Import global functions
 	require('functions.php');
