@@ -82,10 +82,15 @@ function updateDescription() {
     }
     // remove current image
     $("#device-description-div").children("img").remove();
+    
     // update image
     $("#device-description-div").prepend("<img src='./img/devices/" + currDevice.photoFileName + "'>");
-    var description = "This device was deployed in " + currDevice.city + ", " + currDevice.country;
-    description += " on " + new Date(currDevice.placementDate).toLocaleDateString() + ".";
+    
+    //update description
+    var description = "<strong>Serial Number:</strong> " + currDevice.serialNum + "<br/>";
+    description += "<strong>Location:</strong> " + currDevice.city + ", " + currDevice.country + "<br/>";
+    description += "<strong>Deployed On:</strong> " + new Date(currDevice.placementDate).toLocaleDateString() + "<br/>";
+    description += "<br/>This device is being used in a clinic for infection prevention and control (IPC).";
     $("#description").html(description);
 }
 
