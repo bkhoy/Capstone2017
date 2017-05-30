@@ -30,7 +30,8 @@
                     </svg>
                 </a>
             </li>
-            <li class="right_links"> <a href="#" data-toggle="modal" data-target="#myModal">Account</a></li>
+            <li class="right_links"><a href="#" data-toggle="modal" data-target="#myModal">Account</a></li>
+            <li class="right_links"><a href="..\addDeviceLog.html">Add Device/Log</a></li>
         </ul>
     </nav>
 
