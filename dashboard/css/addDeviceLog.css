@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+@import url('common.css');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Source Sans Pro", "sans-serif";
+    background-color: #F4F4F4;
+    min-width: 800px;
+}
+
+nav {
+    top: 0;
+    width: 100%;
+    background-color: #555555;
+    position: absolute;
+    font-size: 16px;
+    z-index: 1;
+}
+
+li a {
+    color: white;
+}
+
+nav ul {
+    text-align: center;
+}
+
+nav ul li {
+    float: none;
+    display: inline-block;
+    margin: 0.5em 1.5em;
+    padding-top: 0.5em;
+}
+
+nav ul li a:hover{
+    color: #c8102e;
+    text-decoration: none;
+}
+
+nav ul li a:visit, nav ul li a:link{
+    color: #c8102e;
+    text-decoration: none;
+}
+
+
+th, td {
+    text-align: center;
+}
+
+#logo {
+    margin-left: 0;
+    text-align: left;
+    max-height: 30px;
+}
+
+.left_links {
+    float:left;
+}
+
+.right_links {
+    float: right;
+}
+
+.box {
+    box-shadow: 2px 2px 2px #d2d2d2;
+    background-color: white;
+    position: relative;
+}
+
+#main {
+    margin-top: 50px;
+}
+
+.row {
+    padding: 20px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.row input {
+	margin-bottom: 2em;
+}
+
+.row2 {
+	width: 90%;
+	height: 100px;
+	text-align: left;
+
+}
+
+#submit-btn {
+}
+
+#submit-btn input{
+	background-color: #c8102e;
+	height: 50px;
+	border: none;
+	color: white;
+	padding: 1em;
+	margin-left: 2em;
+}
+
+#submit-btn input:hover {
+	background-color: #a8102a;
+}
+
+
+h3 {
+	color: #777777;
+}
+
+label {
+	display: block;
+	color: #555555;
+}
+
+#import-text {
+	font-size: 18px;
+	margin-bottom: 2em;
+}

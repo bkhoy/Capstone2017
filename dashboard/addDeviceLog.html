@@ -8,9 +8,10 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/details.css"/>
+    <link rel="stylesheet" href="css/addDeviceLog.css"/>
 </head>
 <body>
     <nav>
@@ -49,72 +50,85 @@
     </div>
 
     <div id="main" class="container">
-
-        <h3>Add a Device</h3>
         <div class="box row">
+         <h3>Add a Device</h3>
+          <hr>
             <form id="addDevice">
-                <div>
-                    <strong>Serial Number:</strong>
-                    <input type="number" name="serialNum" min="0" required>
-                    <br />
+                <div class="row2">
+                    <div class="col-sm-3">
+                        <label>Serial Number:</label>
+                        <input type="number" name="serialNum" min="0" required>
+                    </div>
                     
-                    <strong>Device Photo Name:</strong>
-                    <select name="photoName">
-                    	<option>device1.jpg</option>
-                    	<option>device2.jpg</option>
-                    	<option>device3.jpg</option>
-                    	<option>device4.jpg</option>
-                    	<option>device5.jpg</option>
-                    	<option>device6.jpg</option>
-                    </select>
-                    <br />
+                     <div class="col-sm-3">
+                        <label>Device Photo Name:</label>
+                        <select name="photoName">
+                        	<option>device1.jpg</option>
+                        	<option>device2.jpg</option>
+                        	<option>device3.jpg</option>
+                        	<option>device4.jpg</option>
+                        	<option>device5.jpg</option>
+                        	<option>device6.jpg</option>
+                        </select>
+                    </div>
                     
-                    <strong>Placement Date:</strong>
-                    <input type="date" name="placementDate">
-                </div>                
-
-                <div>
-                    <strong>City:</strong>
-                    <input type="text" name="city">
-                    <br />
-                    
-                    <strong>Country:</strong>
-                    <input type="text" name="country" required>
-              		<br />
-
-                    <strong>Latitude:</strong>
-                    <input type="number" name="latitude" step="0.0001" max="90" min="-90" required>
-                    <br />
-
-                    <strong>Longitude:</strong>
-                    <input type="number" name="longitude" step="0.0001" max="180" min="-180" required>
-	                <br />
-
-                    <input type="submit" name="submit" value="Add Device">
+                     <div class="col-sm-3">
+                        <label>Placement Date:</label>
+                        <input type="date" name="placementDate">
+                    </div>
                 </div>
+                
+                <div class="row2">        
+                    <div class="col-sm-2">
+                        <label>City:</label>
+                        <input type="text" name="city">
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        <label>Country:</label>
+                        <input type="text" name="country" required>
+              		</div>
+
+                     <div class="col-sm-2">
+                        <label>Latitude:</label>
+                        <input type="number" name="latitude" step="0.0001" max="90" min="-90" required>
+                    </div>
+
+                     <div class="col-sm-2">
+                        <label>Longitude:</label>
+                        <input type="number" name="longitude" step="0.0001" max="180" min="-180" required>
+	                </div>
+                    <div id="submit-btn">
+                        <input type="submit" name="submit" value="Add Device">
+                    </div>
+                </div>    
+
+                    
             </form>
 
             <div id="deviceResult"></div>
         </div>
 
-        <h3>Import a Log File</h3>
+  
         <div class="box row">
-        	<p>All logs must have a device associated with them in the database before importing. Use the form above to create a new device in the database if a device does not already exist for this log.</p>
+            <h3>Import a Log File</h3>
+            <hr>
+        	<p id="import-text">All logs must have a device associated with them in the database before importing. Use the form above to create a new device in the database if a device does not already exist for this log.</p>
 
-        	<p id="submitWarning" style="display: none;">Your log file is being processed, this can take some time. <strong>Do not close your browser while the log is being imported.</strong> You will be redirected when the upload is complete.</p>
+        	<p id="submitWarning" style="display: none;">Your log file is being processed, this can take some time. <label>Do not close your browser while the log is being imported.</label> You will be redirected when the upload is complete.</p>
 
             <form id="importLog" action=".\webservice\logImport.php" method="post" enctype="multipart/form-data">
-				<div>
-					<strong>Serial Number:</strong>
+				<div class="col-sm-2">
+					<label>Serial Number:</label>
                     <input type="number" name="serialNum" min="0" required>
 				</div>
 
-				<div>
-					<strong>Log File Upload:</strong>
+				<div class="col-sm-2">
+					<label>Log File Upload:</label>
 					<input name="logFile" type="file" accept=".txt, .csv" required />
 				</div>
 
-				<div> 
+				<div id="submit-btn"> 
 					<input name="logSubmit" type="submit" value="Import Log"/>
 				</div>
 			</form>
