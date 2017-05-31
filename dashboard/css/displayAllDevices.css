@@ -95,12 +95,30 @@ th {
     margin-right: 3em;
 }
 
+#statues {
+    padding: 1em;
+}
+
 .statuses {
     visibility: hidden;
     float: left;
     display: inline-block;
-    margin: 1em;
+    margin-right: 1em;
     text-align: center;
+}
+
+.num {
+    margin-right: 2em;
+}
+
+.statuses p {
+    color: #aaaaaa;
+    font-size: 12px;
+}
+
+.statuses h1 {
+    color: #555555;
+    margin-top: 0;
 }
 
 .statuses img {
@@ -109,6 +127,7 @@ th {
 }
 
 .status-border {
-    border-right: 1px solid #000;
+    border-right: 1px solid #E4E4E4;
     padding-right: 2em;
+    margin-right: 2em;
 }

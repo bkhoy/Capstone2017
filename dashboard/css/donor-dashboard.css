@@ -332,7 +332,7 @@ span {
 }
 
 #map-graph {
-    visibility: visible;
+    visibility: hidden;
     background-color: white;
     min-height: 820px;
 }
