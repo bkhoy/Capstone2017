@@ -47,6 +47,8 @@ function initDeviceList() {
         // Highlight the first item for user
         if (i == 0) {
             div.addClass("selected");
+        } else {
+            div.addClass("unactive");
         }
         div.prepend("<img src='./img/devices/" + DEVICES[i].photoFileName + "'>");
         // creates a hidden element attached to each div that will allow the map-graph interaction to work.
@@ -66,7 +68,9 @@ function initDeviceList() {
             }
             // Update the highlighted item for the user
             $(".device-block").removeClass("selected");
+            $(".device-block").addClass("unactive");
             $(this).addClass("selected");
+            $(this).removeClass("unactive");
             updateDescription();
             updateMap();
             removeData();

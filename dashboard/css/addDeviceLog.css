@@ -89,10 +89,7 @@ th, td {
 
 }
 
-#submit-btn {
-}
-
-#submit-btn input{
+#submit-btn input {
 	background-color: #c8102e;
 	height: 50px;
 	border: none;
@@ -118,4 +115,8 @@ label {
 #import-text {
 	font-size: 18px;
 	margin-bottom: 2em;
+}
+
+#addDevice input[type="number"], #addDevice input[type="text"], #addDevice select {
+    width: 100%;
 }

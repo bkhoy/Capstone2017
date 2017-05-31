@@ -314,6 +314,7 @@ span {
 }
 #device-description-div img {
     max-width: 240px;
+    max-height: 160px;
     display: inline;
     float: left;
 }
@@ -343,5 +344,8 @@ canvas {
 
 .selected {
     background-color: black;
-    opacity: 0.4;
+}
+
+.unactive {
+    opacity: .4;
 }
