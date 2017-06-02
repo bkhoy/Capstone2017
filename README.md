@@ -20,7 +20,7 @@ The SE Flow is a chlorine generator currently being developed by a team at MSR G
 The 'dashboard' directory contains all files and code related to the front facing dashboards as well as the backend web service. All web service and backend code will be contained in the "webservice" subdirectory. 
 
 ## Technology Stack Rationale
-For the frontend dashboards, we used jQuery to make everything functional. We used open source software such as Chart.js to create the charts and DataTables for the table functionality. Finally, we used the Google Maps API to display the Google Maps on the donor dashboard. We chose these libaries because they were convenient and well documented, so that if there is future development work, the dashboard main be maintained easily.
+For the frontend dashboards, we used jQuery to make everything functional. We used open source software such as Chart.js to create the charts and DataTables for the table functionality. Finally, we used the Google Maps API to display the Google Maps on the donor dashboard. We chose these libaries because they were convenient and well documented, so that if there is future development work, the dashboard can be maintained easily.
 
 For the backend, we had a LAMP stack running (Linux, Apache web server, MySQL RDBMS, PHP). We chose to use a LAMP stack to Isaac's experience and proficiency with each element in the LAMP stack. 
 
