@@ -1,4 +1,6 @@
 <?php
+	// Imports the given log file into the database for the given serialNum and returns a success message on the page.
+
 	// is there a way to set this based on how many lines are in the given file?
 	ini_set('max_execution_time', 50000);
 

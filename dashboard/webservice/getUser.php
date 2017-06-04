@@ -1,5 +1,5 @@
 <?php
-	// Retreives the details of a user's account as a JSON file.
+	// Retrieves the details of a user's account, using the given email address, and returns the details as a JSON file.
 	
 	// Imports global functions
 	require('functions.php');

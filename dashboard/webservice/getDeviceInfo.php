@@ -1,5 +1,5 @@
 <?php
-	// Retreives a list of all devices in the database and returns them as a JSON file.
+	// Retreives the details of the device from the database that has the given serialNum.  Returns the device details and the 50 most recentCycles of that device as a JSON file.
 	
 	// Imports global functions
 	require('functions.php');

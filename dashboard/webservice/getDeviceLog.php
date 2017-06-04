@@ -1,4 +1,6 @@
 <?php
+	// Generates a log file as a csv of a device's cycles during the given start and end dates or of all of the device's cycles.
+
 	ini_set('max_execution_time', 50000);
 
 	// Import global functions

@@ -1,5 +1,5 @@
 <?php
-	// Retreives a list of device details for all of the devices associated with a user as a JSON file.
+	// Retreives a list of device details for all of the devices associated with a user, based on the given email address, and returns them as a JSON file.
 	
 	// Imports global functions
 	require('functions.php');
