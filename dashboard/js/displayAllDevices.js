@@ -1,13 +1,17 @@
 'use strict';
 
+
+// When page is ready, run this block of code
 $(function() {
     const GET_ALL_DEVICES = "./webservice/getAllDevices.php";
     const GET_DEVICE_DETAILS = "./deviceDetails.html?serialNum=";
-    // hard coded email for now
-    var email = "admin@msr.com";
     const GET_ACCOUNT_INFO = "./webservice/getUser.php?email=" + email;
 
-    //displays list of all devices
+    // hard coded email for now
+    var email = "admin@msr.com";
+
+    // Retrieves the json file that has the list of all devices.
+    // If call is successful, the table is populated by calling populatePage
     function getAllDevices() {
         $.ajax({
             url: GET_ALL_DEVICES,
@@ -19,9 +23,6 @@ $(function() {
             error: function(error) {
                 console.log(error);
                 $("#statuses").html("Oops! Looks like the data could not be retrieved. Please bring this up to the website admin! Sorry about that. &#9785;");
-                // uncomment the two lines below if you want to run website locally. Comment out the above line as well.
-                // var data = [{"serialNum":"15348","status":"Active","city":"Nairobi","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15345","status":"Active","city":"Mombasa","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15344","status":"Active","city":"Wote","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15342","status":"Active","city":"Dadaab","country":"Kenya","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15347","status":"Active","city":"Port-au-Prince","country":"Haiti","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"},{"serialNum":"15340","status":"Active","city":"Cercadie","country":"Haiti","placementDate":"2017-04-03","mostRecentCycle":"2017-04-17 09:35:00"}];
-                // populatePage(data);
             }
         }).done(function() {
             $(".statuses").css("visibility", "visible");
@@ -29,6 +30,7 @@ $(function() {
         });
     }
 
+    // Function called to populate the page with the given data object
     function populatePage(data) {
         var table = $('.table');
 
@@ -116,7 +118,8 @@ $(function() {
         });
     }
 
-    // populate the Account modal
+    // Populates the Account modal by calling the server endpoint that returns a JSON object
+    // for account information
     $.ajax({
         url: GET_ACCOUNT_INFO,
         dataType: "json",
@@ -132,5 +135,6 @@ $(function() {
         }
     });
 
+    // Calls the function to get all device information
     getAllDevices();
 });

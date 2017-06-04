@@ -10,6 +10,7 @@
 var DEVICES = [];
 // global variable for the google map
 var map = null;
+// global variable for the current device
 var currDevice = null;
 var myBarChart = null;
 
@@ -37,8 +38,8 @@ $(function(){
 
 });
 
-// initiatives the list of DEVICES on the left side of the map
-// requires that the DEVICES list is populated (meaning a successful call to the server)
+// Initializes the list of DEVICES for the donor (the scrollable div black div)
+// Requires that the DEVICES list is populated (meaning a successful call to the server)
 function initDeviceList() {
     var parent = $("#scrollable-div");
     for (var i = 0; i < DEVICES.length; i++) {
@@ -80,6 +81,8 @@ function initDeviceList() {
     }
 }
 
+
+// Updates the device's description (left of the map)
 function updateDescription() {
     if (currDevice == null) {
         currDevice = DEVICES[0];
@@ -98,12 +101,13 @@ function updateDescription() {
     $("#description").html(description);
 }
 
+// Pans the map's camera to the current device's latitude and longtitude coordinates
 function updateMap() {
     var latLng = new google.maps.LatLng(currDevice.latitude, currDevice.longitude);
     map.panTo(latLng);
 }
 
-// initMap is called in html when it calls to Google Maps API
+// initMap is called in HTML when browser renders the Google Maps
 function initMap() {
     var api = "./webservice/getUserDevices.php?email=ssmith%40gmail.com";
     $.ajax({
@@ -120,14 +124,6 @@ function initMap() {
             console.log(error);
             $("#devices").html("<h3>Oops! Looks like the data could not be retrieved. " +
                "Please bring this up to the website admin! Sorry about that. &#9785;</h3>");
-
-            // For local dev, uncomment the below lines of code and comment out the above line.
-            // The data variable is just the copy/pasted response from manually calling the endpoint.
-            // var data = [{"serialNum":"15348","city":"Nairobi","country":"Kenya","longitude":"36.8219","latitude":"-1.29207","placementDate":"2017-04-03","photoFileName":"device1.jpg","cycles":[{"startDateTime":"2017-04-16 09:35:00","runtime":"00:10:02","totalChlorineProduced":"0","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-15 09:35:00","runtime":"00:37:31","totalChlorineProduced":"1437.17","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-12 09:35:00","runtime":"03:04:39","totalChlorineProduced":"8887.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-11 09:35:00","runtime":"03:08:29","totalChlorineProduced":"9392.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-10 15:35:00","runtime":"03:49:12","totalChlorineProduced":"10809.3","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-10 09:35:00","runtime":"04:00:43","totalChlorineProduced":"11802.2","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-09 09:35:00","runtime":"04:15:40","totalChlorineProduced":"11797.7","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-08 09:35:00","runtime":"03:21:43","totalChlorineProduced":"9235.5","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-07 09:35:00","runtime":"00:40:19","totalChlorineProduced":"1465.33","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-06 09:35:00","runtime":"02:42:23","totalChlorineProduced":"7492.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."}]},{"serialNum":"15342","city":"Dadaab","country":"Kenya","longitude":"40.3191","latitude":"0.0925798","placementDate":"2017-04-03","photoFileName":"device2.jpg","cycles":[{"startDateTime":"2017-04-16 09:35:00","runtime":"00:10:02","totalChlorineProduced":"0","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-15 09:35:00","runtime":"00:37:31","totalChlorineProduced":"1437.17","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-12 09:35:00","runtime":"03:04:39","totalChlorineProduced":"8887.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-11 09:35:00","runtime":"03:08:29","totalChlorineProduced":"9392.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-10 15:35:00","runtime":"03:49:12","totalChlorineProduced":"10809.3","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-10 09:35:00","runtime":"04:00:43","totalChlorineProduced":"11802.2","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-09 09:35:00","runtime":"04:15:40","totalChlorineProduced":"11797.7","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-08 09:35:00","runtime":"03:21:43","totalChlorineProduced":"9235.5","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-07 09:35:00","runtime":"00:40:19","totalChlorineProduced":"1465.33","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-06 09:35:00","runtime":"02:42:23","totalChlorineProduced":"7492.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."}]},{"serialNum":"15340","city":"Cercadie","country":"Haiti","longitude":"-72.3074","latitude":"18.5944","placementDate":"2017-04-03","photoFileName":"device3.jpg","cycles":[{"startDateTime":"2017-04-16 09:35:00","runtime":"00:10:02","totalChlorineProduced":"0","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-15 09:35:00","runtime":"00:37:31","totalChlorineProduced":"1437.17","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-12 09:35:00","runtime":"03:04:39","totalChlorineProduced":"8887.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-11 09:35:00","runtime":"03:08:29","totalChlorineProduced":"9392.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-10 15:35:00","runtime":"03:49:12","totalChlorineProduced":"10809.3","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-10 09:35:00","runtime":"04:00:43","totalChlorineProduced":"11802.2","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-09 09:35:00","runtime":"04:15:40","totalChlorineProduced":"11797.7","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-08 09:35:00","runtime":"03:21:43","totalChlorineProduced":"9235.5","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-07 09:35:00","runtime":"00:40:19","totalChlorineProduced":"1465.33","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."},{"startDateTime":"2017-04-06 09:35:00","runtime":"02:42:23","totalChlorineProduced":"7492.83","statusName":"Completed","statusDesc":"This cycle ran successfully and did not throw any errors or warnings."}]}];
-            // populateMap(data);
-            // initDeviceList();
-            // initChart(DEVICES[0]);
-            // updateDescription();
         }
     }).done(function() {
         $("#map-graph").css("visibility", "visible");
@@ -160,7 +156,7 @@ function populateMap(data) {
     }
 }
 
-// initializes the chart. uses Chart.js library.
+// Initializes the chart with the first device in DEVICES. uses Chart.js library.
 function initChart(device) {
     var ctx = document.getElementById("myChart").getContext("2d");
     ctx.canvas.width = 520;
@@ -219,6 +215,7 @@ function initChart(device) {
     });
 }
 
+// Adds data for the chart and updates the graph
 function updateGraph() {
     var numOfCycles = 10;
     var labels = [];
@@ -241,6 +238,7 @@ function updateGraph() {
     myBarChart.update();
 }
 
+// Removes the data on the chart
 function removeData() {
     // empty the labels (xAxis tick labels AKA cycle datetimes) and also dataset
     myBarChart.data.labels = [];
