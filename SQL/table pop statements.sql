@@ -1,4 +1,7 @@
+# Populates the SE Flow Cholrine Maker database with default values in the look up tables and then creates test data for all but the cycle & entry tables.
+
 USE SEFlow_dashboard;
+
 #Look up tables
 INSERT INTO ACCOUNT_TYPE (accountType, accountTypeDesc) VALUES
 	('donor', 'This user contributed to a SE-Flow device and can see information about the device they donate.'),

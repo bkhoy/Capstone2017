@@ -1,5 +1,7 @@
 CREATE DEFINER=`appleTea`@`%` PROCEDURE `updateDeviceStatus`(updateSerialNum int)
 BEGIN
+	# Updates the deviceStatus of the device with the given serialNum
+
 	DECLARE cycleDeviceID int;
     DECLARE mostRecentCycleID int;
     DECLARE cycleIsError BOOLEAN;

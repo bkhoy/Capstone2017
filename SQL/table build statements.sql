@@ -1,7 +1,10 @@
-#DROP DATABASE SEFlow_dashboard;
+#Database creation script for the SE Flow Chlorine Maker
+
+#DATABASE
 CREATE DATABASE SEFlow_dashboard;
 USE SEFlow_dashboard;
-#table creation statements
+
+# TABLES
 CREATE TABLE ORGANIZATION (
 	organizationID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     organizationName varchar(50) NOT NULL,
@@ -113,5 +116,5 @@ CREATE TABLE ENTRY (
     FOREIGN KEY(cycleID) REFERENCES CYCLE(cycleID)
 );
 
-# Creates the account for the dashboard to access the database
+# USERS
 GRANT SELECT, UPDATE, INSERT, EXECUTE ON SEFlow_dashboard.* To 'dashboard'@'%' IDENTIFIED BY 'MouS@17Rese_tain';

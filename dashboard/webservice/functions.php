@@ -1,5 +1,5 @@
 <?php
-	// Global functions used accross the web service.
+	// Global functions used accross multiple parts of the web service.
 
 //FUNCTIONS
 	// Creates and returns a new PDO object connected to the SEFlow_dashboard database
@@ -11,11 +11,11 @@
 
 	function errorMessage($errorMessage) {
 		// for production 
-		//die(); ???
+		die();
 
 		// for testing
-		echo 'Error: <br />' . $errorMessage . '<br />';
-		return null;
+		//echo 'Error: <br />' . $errorMessage . '<br />';
+		//return null;
 	}
 
 	// Gets $numCycles (int) of the most recent cycles for the device with the given $serialNum (int).  Returns the values as an array.
